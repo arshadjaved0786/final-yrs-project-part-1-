@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cart - Diamond Restro & Bar</title>
+  <style>
+     body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ffffff, #000000);
+      color: #e0e0e0;
+      overflow-x: hidden;
+    }
+    header {
+      background: linear-gradient(135deg, #ffffff, #000000);
+      color: #f0f0f0;
+      padding: 20px 10px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.8rem;
+      text-shadow: 2px 2px 8px #000a12;
+    }
+    header img {
+      width: 200px;
+      height: auto;
+      margin-top: 10px;
+      filter: drop-shadow(2px 2px 4px #000a12);
+    }
+    nav {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+      margin-bottom: 20px;
+    }
+    nav a {
+      color: #cce7ff;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 1.1rem;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+    nav a:hover {
+      color: #171818;
+      transform: scale(1.1);
+      text-shadow: 0 0 8px #0a0a0a;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background-color: #fff8e1;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 2rem;
+      color: #e64a19;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background-color: #000000;
+      margin: 10px 0;
+      padding: 15px 20px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      font-weight: 500;
+    }
+
+    .price {
+      font-weight: bold;
+      color: #d84315;
+    }
+
+    .total-amount {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #d84315;
+      margin: 30px 0;
+      text-align: center;
+    }
+
+    button {
+      display: block;
+      margin: 0 auto;
+      padding: 12px 30px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      background-color: #d84315;
+      color: #000000;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #bf360c;
+    }
+  </style>
+</head>
+<body>
+  <header style="display: flex; align-items: center; justify-content: space-between; padding: 10px;">
+    <!-- Left: Logo -->
+    <div style="flex: 1;">
+        <img src="https://shorturl.at/4Stns" alt="Diamond Logo" style="height: 160px; width: 160px; border-radius: 50%; object-fit: cover;">
+    </div>
+    <!-- Center: Heading -->
+    <div style="flex: 1; text-align: center;">
+        <h1 style="margin: 0; white-space: nowrap; font-size: 55px;">DIAMOND RESTRO AND BAR</h1>
+    </div>
+    <!-- Right: Empty to balance layout -->
+    <div style="flex: 1;"></div>
+  </header>
+
+  <nav>
+    <a href="veg.html">Veg</a>
+    <a href="nonveg.html">Non-Veg</a>
+    <a href="drinks.html">Drinks</a>
+    <a href="cart.html">🛒 Cart</a>
+    <a href="index.html">🏠 Home</a>
+  </nav>
+
+  <div class="container">
+    <h2>Your Cart</h2>
+    <ul id="cart-items">
+      <!-- Cart items will be dynamically inserted here -->
+    </ul>
+    <div class="total-amount" id="total-amount">Total: ₹0</div>
+    <button id="checkoutBtn">Checkout</button>
+  </div>
+
+  <script>
+    function loadCart() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const cartItemsContainer = document.getElementById('cart-items');
+      cartItemsContainer.innerHTML = '';
+      let total = 0;
+
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<li>Your cart is empty.</li>';
+        document.getElementById('total-amount').textContent = 'Total: ₹0';
+        document.getElementById('checkoutBtn').disabled = true;
+        return;
+      }
+
+      cart.forEach((item, index) => {
+        total += item.price;
+        const li = document.createElement('li');
+        li.innerHTML = `${item.name} <span class="price">₹${item.price}</span>`;
+        cartItemsContainer.appendChild(li);
+      });
+
+      document.getElementById('total-amount').textContent = `Total: ₹${total}`;
+      document.getElementById('checkoutBtn').disabled = false;
+    }
+
+    document.getElementById('checkoutBtn').addEventListener('click', function() {
+      window.location.href = 'delivery.html';
+    });
+
+    loadCart();
+  </script>
+</body>
+</html>

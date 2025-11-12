@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        if (localStorage.getItem("isLoggedIn") !== "true") {
+            window.location.href = "login.html";
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diamond Restro & Bar - Home</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ffffff, #000000);
+            color: #f0f0f0;
+        }
+
+        header {
+            background: linear-gradient(135deg, #ffffff, #000000);
+            color: #f0f0f0;
+            padding: 20px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            animation: headerFadeZoom 1.5s ease forwards;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.8rem;
+            text-shadow: 2px 2px 8px #000a12;
+            animation: glowPulse 3s ease-in-out infinite alternate;
+        }
+
+        header img {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            filter: drop-shadow(2px 2px 4px #000a12);
+            animation: glowPulse 3s ease-in-out infinite alternate;
+        }
+
+        .logout-btn {
+            background-color: #ff4d4d;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-right: 10px;
+        }
+
+        .logout-btn:hover {
+            background-color: #ff1a1a;
+        }
+
+        nav {
+            background-color: rgba(162, 153, 153, 0.6);
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        nav a {
+            color: #cce7ff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #000000;
+            transform: scale(1.1);
+            text-shadow: 0 0 8px #000000;
+        }
+
+        section {
+            padding: 40px;
+            max-width: 1000px;
+            margin: auto;
+            background-color: rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            line-height: 1.8;
+        }
+
+        h2 {
+            text-align: center;
+            color: #000000;
+        }
+
+        .animated-paragraph {
+            margin-top: 30px;
+            font-size: 1.2rem;
+            text-align: center;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            animation: floatIn3D 3s ease forwards;
+        }
+
+        @keyframes headerFadeZoom {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes glowPulse {
+            0% {
+                text-shadow: 0 0 6px #000000, 0 0 10px #000000;
+                filter: drop-shadow(0 0 6px #000000);
+            }
+
+            100% {
+                text-shadow: 0 0 20px #000000, 0 0 30px #000000;
+                filter: drop-shadow(0 0 12px #000000);
+            }
+        }
+
+        @keyframes floatIn3D {
+            0% {
+                opacity: 0;
+                transform: rotateX(-90deg) translateZ(-200px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: rotateX(0deg) translateZ(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <!-- Left: Logo -->
+        <div style="flex: 1; display: flex; align-items: center;">
+            <img src="https://shorturl.at/4Stns" alt="Diamond Logo">
+        </div>
+
+        <!-- Center: Heading -->
+        <div style="flex: 1; text-align: center;">
+            <h1>DIAMOND RESTRO AND BAR</h1>
+        </div>
+
+        <!-- Right: Logout Button -->
+        <div style="flex: 1; display: flex; justify-content: flex-end; align-items: center;">
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </header>
+
+    <nav>
+        <a href="index.html">Home</a> |
+        <a href="Menu.html">Menu</a> |
+        <a href="contact.html">Contact Us</a>
+    </nav>
+
+    <section id="contentSection">
+        <h2>WELCOME TO DIAMOND RESTRO & BAR</h2>
+        <p>At Diamond Restro & Bar, we bring sparkle to every plate and pour. Since opening in 2023, we’ve been serving a perfect fusion of gourmet dining and vibrant bar vibes.</p>
+        <p>Whether you're here for a casual evening out, a romantic dinner, or a lively night with friends, we offer an atmosphere that's both sophisticated and welcoming. Our chefs craft each dish with precision and flair, blending bold flavors, fresh ingredients, and artistic presentation. From sizzling appetizers to decadent desserts, every bite is a gem.</p>
+        <p>Our bar is the heart of the energy—shaking, stirring, and pouring signature cocktails, premium spirits, and curated wines. Sip under ambient lighting, enjoy live music or DJ nights, and let your evenings shimmer with unforgettable moments.</p>
+        <p class="animated-paragraph">
+            Join us for a dining experience that blends bold flavors with cozy elegance — only at <strong>Diamond Restro & Bar</strong>.
+        </p>
+    </section>
+
+    <script>
+        function logout() {
+            localStorage.removeItem("isLoggedIn");
+            window.location.href = "login.html";
+        }
+    </script>
+
+</body>
+
+</html>

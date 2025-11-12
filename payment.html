@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Payment Options - Diamond Restro & Bar</title>
+  <style>
+   body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ffffff, #000000);
+      color: #e0e0e0;
+      overflow-x: hidden;
+   }
+     header {
+      background: linear-gradient(135deg, #ffffff, #000000);
+      color: #f0f0f0;
+      padding: 15px 10px;
+      text-align: center;
+      box-shadow: 0 4px 3px rgba(0, 0, 0, 0.3);
+      animation: headerFadeZoom 1.5s ease forwards;
+    }
+
+   header h1 {
+            margin: 0;
+            font-size: 2.8rem;
+            text-shadow: 2px 2px 8px #000a12;
+            animation: glowPulse 3s ease-in-out infinite alternate;
+
+    }
+
+    header img {
+      width: 200px;
+      height: auto;
+      margin-top: 10px;
+      filter: drop-shadow(2px 2px 4px #000a12);
+      animation: glowPulse 3s ease-in-out infinite alternate;
+    }
+
+    nav {
+      background-color: #222;
+      text-align: center;
+      padding: 15px 0;
+    }
+
+    nav a {
+      color: #cce7ff;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #000000;
+      text-shadow: 0 0 8px #fdffff;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      animation: floatCard 4s ease-in-out infinite alternate;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 2rem;
+      text-shadow: 0 0 3px #000000;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background-color: rgba(255, 255, 255, 0.1);
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 3px rgba(0, 255, 209, 0.2);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: fadeInUp 0.5s forwards;
+    }
+
+    li:nth-child(1) { animation-delay: 0.2s; }
+    li:nth-child(2) { animation-delay: 0.4s; }
+    li:nth-child(3) { animation-delay: 0.6s; }
+    li:nth-child(4) { animation-delay: 0.8s; }
+    li:nth-child(5) { animation-delay: 1s; }
+    li:nth-child(6) { animation-delay: 1.2s; }
+
+    a {
+      color: #000000;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .total-amount {
+      font-size: 1.8rem;
+      font-weight: bold 10px;
+      color: #000000;
+      margin-bottom: 10px;
+      text-align: center;
+      text-shadow: 0 0 3px #000000;
+    }
+
+    @keyframes glowPulse {
+      0% {
+        text-shadow: 0 0 6px #000000, 0 0 10px #000000, 0 0 20px #000000;
+        filter: drop-shadow(0 0 6px #000000);
+      }
+      100% {
+        text-shadow: 0 0 20px #000000, 0 0 30px #000000, 0 0 40px #000000;
+        filter: drop-shadow(0 0 12px #000000);
+      }
+    }
+
+    @keyframes floatCard {
+      0% {
+        transform: translateY(0px);
+      }
+      100% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes headerFadeZoom {
+      0% {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .qr-section {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .qr-section img {
+      width: 250px;
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .qr-section p {
+      font-size: 1rem;
+      margin-top: 10px;
+    }
+
+    .qr-section button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      color: #000000;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      transition: background-color 0.3s ease;
+    }
+
+    .qr-section button:hover {
+      background-color: #f6f6f6;
+    }
+
+    #orderConfirmation {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      color: #aff;
+    }
+  </style>
+</head>
+<body>
+
+  <header style="display: flex; align-items: center; justify-content: space-between; padding: 10px;">
+    <!-- Left: Logo -->
+    <div style="flex: 1;">
+        <img src="https://shorturl.at/4Stns" alt="Diamond Logo" style="height: 160px; width: 160px; border-radius: 50%; object-fit: cover;">
+    </div>
+    <!-- Center: Heading -->
+    <div style="flex: 1; text-align: center;">
+        <h1 style="margin: 0; white-space: nowrap; font-size: 55px;">DIAMOND RESTRO AND BAR</h1>
+    </div>
+    <!-- Right: Empty to balance layout -->
+    <div style="flex: 1;"></div>
+  </header>
+
+  <nav>
+    <a href="payment.html">Payment</a> |
+    <a href="track.html">Track</a> |
+    <a href="index.html">🏠 Home</a>
+  </nav>
+
+  <div class="container">
+    <h2>💳 Available Payment Methods</h2>
+
+    <!-- Total Amount Display -->
+    <div class="total-amount" id="total-amount">Total Amount to Pay: ₹0</div>
+
+    <ul>
+      <li><strong>Credit/Debit Cards:</strong> Accepts major credit and debit cards. <a href="https://www.visa.com" target="_blank">Learn More</a></li>
+      <li><strong>Net Banking:</strong> Direct bank transfers. <a href="https://www.yourbank.com/netbanking" target="_blank">Learn More</a></li>
+      <li><strong>Cash on Delivery:</strong> Pay in cash when your order is delivered.</li>
+      <li><strong>UPI Payments:</strong> UPI for instant bank transfers. <a href="https://www.npci.org.in/what-is-upi" target="_blank">Learn More</a></li>
+    </ul>
+
+    <div class="qr-section">
+      <h3>📱 Pay Using Google Pay</h3>
+      <img src="https://i.postimg.cc/L4J1T7gc/Google-Pay-QR.png" alt="Google Pay QR Code" />
+      <p>Scan this QR code using any UPI app to pay.<br><strong>UPI ID: arshadjavedalam2004-1@oksbi</strong></p>
+      <button onclick="generateOrderID()">✅ Payment Done - Generate Order ID</button>
+      <p id="orderConfirmation"></p>
+    </div>
+  </div>
+
+  <script>
+    // Display total amount from cart stored in localStorage
+    function displayTotalAmount() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      let total = 0;
+      cart.forEach(item => {
+        total += Number(item.price) || 0;
+      });
+      document.getElementById('total-amount').textContent = `Total Amount to Pay: ₹${total}`;
+    }
+
+    // Generate a unique order ID on payment confirmation and reset cart and total
+    function generateOrderID() {
+      const timestamp = Date.now();
+      const randomNum = Math.floor(Math.random() * 1000);
+      const orderID = "ORD" + timestamp + randomNum;
+
+      // Show confirmation message
+      document.getElementById("orderConfirmation").innerHTML =
+        `🎉 Thank you for your payment!<br>Your Order ID is: <strong>${orderID}</strong><br>Keep it safe for tracking.`;
+
+      // Clear cart from localStorage
+      localStorage.removeItem('cart');
+
+      // Reset total amount display
+      document.getElementById('total-amount').textContent = "Total Amount to Pay: ₹0";
+    }
+
+    // Call the function on page load to display total
+    displayTotalAmount();
+  </script>
+
+</body>
+</html>

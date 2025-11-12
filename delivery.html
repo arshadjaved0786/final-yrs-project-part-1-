@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Delivery - Diamond Restro & Bar</title>
+  <style>
+body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ffffff, #000000);
+      color: #e0e0e0;
+      overflow-x: hidden;
+    }
+   header {
+      background: linear-gradient(135deg, #ffffff, #000000);
+      color: #f0f0f0;
+      padding: 20px 10px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.8rem;
+      text-shadow: 2px 2px 8px #000a12;
+      animation: glowPulse 3s ease-in-out infinite alternate;
+    }
+
+    header img {
+      width: 200px;
+      height: auto;
+      margin-top: 10px;
+      filter: drop-shadow(2px 2px 4px #000a12);
+      animation: glowPulse 3s ease-in-out infinite alternate;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 40px auto;
+      background-color: rgba(0, 0, 0, 0.05);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      animation: floatCard 4s ease-in-out infinite alternate;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 2rem;
+      text-shadow: 0 0 8px #000000;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #000000;
+    }
+
+    input, textarea {
+      padding: 10px;
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 1rem;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      padding: 12px;
+      background: #ffffff;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #000;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #000000;
+    }
+
+    .back-home {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .back-home a {
+      color: #cce7ff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: color 0.3s ease;
+    }
+
+    .back-home a:hover {
+      color: #000000;
+      text-shadow: 0 0 8px #000000;
+    }
+
+    @keyframes glowPulse {
+      0% {
+        text-shadow: 0 0 6px #000000, 0 0 10px #000000, 0 0 20px #000000;
+        filter: drop-shadow(0 0 6px #000000);
+      }
+      100% {
+        text-shadow: 0 0 20px #000000, 0 0 30px #000000, 0 0 40px #000000;
+        filter: drop-shadow(0 0 12px #000000);
+      }
+    }
+
+    @keyframes floatCard {
+      0% {
+        transform: translateY(0px);
+      }
+      100% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @keyframes headerFadeZoom {
+      0% {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* Modal popup styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(253, 248, 248, 0.6);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: #000000;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 0 20px #ffffff;
+    }
+
+    .modal-content h3 {
+      color: #fff2f2;
+      margin-bottom: 20px;
+    }
+
+    .modal-content button {
+      background-color: #fffefe;
+      color: #000000;
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .modal-content button:hover {
+      background-color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <header style="display: flex; align-items: center; justify-content: space-between; padding: 10px;">
+    <!-- Left: Logo -->
+    <div style="flex: 1;">
+        <img src="https://shorturl.at/4Stns" alt="Diamond Logo" style="height: 160px; width: 160px; border-radius: 50%; object-fit: cover;">
+    </div>
+    <!-- Center: Heading -->
+    <div style="flex: 1; text-align: center;">
+        <h1 style="margin: 0; white-space: nowrap; font-size: 55px;">DIAMOND RESTRO AND BAR</h1>
+    </div>
+    <!-- Right: Empty to balance layout -->
+    <div style="flex: 1;"></div>
+  </header>
+
+  <div class="container">
+     <h2 class="animated-3d-text" style="font-size: 30px;color:#000; bold; text-align: center;">🚚 Delivery Details </h2>
+    <form id="deliveryForm">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" placeholder="Enter your full name" required>
+
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" placeholder="Enter your phone number" required>
+
+      <label for="address">Delivery Address</label>
+      <textarea id="address" rows="3" placeholder="Street, Area, City" required></textarea>
+
+      <label for="pincode">Pin Code</label>
+      <input type="text" id="pincode" placeholder="Enter your area pin code" required>
+
+      <label for="instructions">Delivery Instructions (Optional)</label>
+      <textarea id="instructions" rows="3" placeholder="e.g., ring the bell, leave at doorstep"></textarea>
+
+      <button type="submit">Place Order</button>
+    </form>
+
+    <div class="back-home">
+      <a href="Cart.html">🛒 Go to Cart</a> |
+      <a href="payment.html">payment</a>
+    </div>
+  </div>
+
+  <!-- Modal for confirmation -->
+  <div class="modal" id="confirmationModal">
+    <div class="modal-content">
+      <h3>Address is saved</h3>
+      <button id="okBtn">OK</button>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("deliveryForm");
+    const modal = document.getElementById("confirmationModal");
+    const okBtn = document.getElementById("okBtn");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault(); // Prevent form from submitting
+      modal.style.display = "flex"; // Show modal
+    });
+
+    okBtn.addEventListener("click", function () {
+      modal.style.display = "none";
+      window.location.href = "payment.html"; // Redirect to payment
+    });
+  </script>
+
+</body>
+</html>
