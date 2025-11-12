@@ -46,9 +46,9 @@
       transition: transform 0.3s ease, color 0.3s ease;
     }
     nav a:hover {
-      color: #171818;
+      color: #ffffff;
       transform: scale(1.1);
-      text-shadow: 0 0 8px #0a0a0a;
+      text-shadow: 0 0 8px #ffffff;
     }
 
     .container {
@@ -99,20 +99,33 @@
 
     button {
       display: block;
-      margin: 0 auto;
+      margin: 10px auto;
       padding: 12px 30px;
       font-size: 1.2rem;
       font-weight: bold;
       border: none;
       border-radius: 12px;
-      background-color: #d84315;
-      color: #000000;
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
 
-    button:hover {
+    #checkoutBtn {
+      background-color: #d84315;
+      color: #ffffff;
+    }
+
+    #checkoutBtn:hover {
       background-color: #bf360c;
+    }
+
+    #backBtn {
+      background-color: #444;
+      color: #fff;
+    }
+
+    #backBtn:hover {
+      background-color: #000;
+      color: #00ffd1;
     }
   </style>
 </head>
@@ -130,15 +143,14 @@
     <div style="flex: 1;"></div>
   </header>
 
- <nav>
-  <a href="index.html">🏠 Home</a>
-  <a href="menu.html">📋 Menu</a>
-  <a href="veg.html">🥗 Veg</a>
-  <a href="nonveg.html">🍗 Non-Veg</a>
-  <a href="drinks.html">🍹 Drinks</a>
-  <a href="cart.html">🛒 Cart</a>
-</nav>
-
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="menu.html">📋 Menu</a>
+    <a href="veg.html">🥗 Veg</a>
+    <a href="nonveg.html">🍗 Non-Veg</a>
+    <a href="drinks.html">🍹 Drinks</a>
+    <a href="cart.html">🛒 Cart</a>
+  </nav>
 
   <div class="container">
     <h2>Your Cart</h2>
@@ -147,6 +159,7 @@
     </ul>
     <div class="total-amount" id="total-amount">Total: ₹0</div>
     <button id="checkoutBtn">Checkout</button>
+    <button id="backBtn">⬅️ Back to Menu</button>
   </div>
 
   <script>
@@ -157,7 +170,10 @@
       let total = 0;
 
       if (cart.length === 0) {
-        cartItemsContainer.innerHTML = '<li>Your cart is empty.</li>';
+        cartItemsContainer.innerHTML = `
+          <li>Your cart is empty. 
+            <a href="menu.html" style="color:#ff9800; text-decoration:underline;">Go back to Menu</a>
+          </li>`;
         document.getElementById('total-amount').textContent = 'Total: ₹0';
         document.getElementById('checkoutBtn').disabled = true;
         return;
@@ -166,7 +182,10 @@
       cart.forEach((item, index) => {
         total += item.price;
         const li = document.createElement('li');
-        li.innerHTML = `${item.name} <span class="price">₹${item.price}</span>`;
+        li.innerHTML = `
+          ${item.name} 
+          <span class="price">₹${item.price}</span>
+        `;
         cartItemsContainer.appendChild(li);
       });
 
@@ -174,12 +193,17 @@
       document.getElementById('checkoutBtn').disabled = false;
     }
 
+    // Checkout redirect
     document.getElementById('checkoutBtn').addEventListener('click', function() {
       window.location.href = 'delivery.html';
+    });
+
+    // Back to Menu button
+    document.getElementById('backBtn').addEventListener('click', function() {
+      window.location.href = 'menu.html';
     });
 
     loadCart();
   </script>
 </body>
 </html>
-
