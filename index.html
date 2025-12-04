@@ -125,7 +125,6 @@
 
   <main class="container">
     <section class="hero" aria-labelledby="home-title">
-      <!-- HERO (click to rotate between 4 hero photos) -->
       <div class="hero-left" id="heroImage" title="Click to view next hero image">
         <img src="" alt="Dish or restaurant hero" id="heroImgEl" />
       </div>
@@ -183,105 +182,142 @@
   </footer>
 
   <script>
-    // ====== Image collections (4 images each) - professional Unsplash images ======
-    const heroImages = [
-      "https://images.unsplash.com/photo-1541542684-6b7f2b0b1a7b?q=80&w=1600&auto=format&fit=crop&s=b5b9d6fb5a9f7bbd9f2c469e7f1c1d22",
-      "https://images.unsplash.com/photo-1523292562223-88b5b6c2ec48?q=80&w=1600&auto=format&fit=crop&s=7a91b3a378a5f8d0a4fb817f3e3a4b35",
-      "https://images.unsplash.com/photo-1526318472351-c75fcf070db6?q=80&w=1600&auto=format&fit=crop&s=171b2b04b5b2d56b2ea6c6d4d6d9f8ea",
-      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1600&auto=format&fit=crop&s=6c0a2f5a3b6a7a6d9c8c9e5b4a2c6d7f"
-    ];
+    // Wrap everything after DOM ready so elements are available
+    document.addEventListener('DOMContentLoaded', () => {
+      // ====== stable image collections (4 images each) ======
+      const heroImages = [
+        // high-quality stable Unsplash URLs
+        "https://images.unsplash.com/photo-1541542684-6b7f2b0b1a7b?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1523292562223-88b5b6c2ec48?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1526318472351-c75fcf070db6?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1600&q=80"
+      ];
 
-    const feat1Images = [
-      "https://images.unsplash.com/photo-1604908813403-df2a3b2c9b64?q=80&w=800&auto=format&fit=crop&s=0d6bcdc1b8b9b3f9e8f4a1c6a0c3a8d4",
-      "https://images.unsplash.com/photo-1546069901-eacef0df6022?q=80&w=800&auto=format&fit=crop&s=9cf6d0e4b0088cc3b2d3f21a5d7f47b7",
-      "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=800&auto=format&fit=crop&s=62a2fbf4a47f1b3e9d6a0d4e4b9a8b3b",
-      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800&auto=format&fit=crop&s=6c0a2f5a3b6a7a6d9c8c9e5b4a2c6d7f"
-    ];
+      const feat1Images = [
+        "https://images.unsplash.com/photo-1604908813403-df2a3b2c9b64?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1546069901-eacef0df6022?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=80"
+      ];
 
-    const feat2Images = [
-      "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop&s=5b87329a7b712f7b0b7b1c8b2f2b9b4a",
-      "https://images.unsplash.com/photo-1542444459-db8b2d8a2b5e?q=80&w=800&auto=format&fit=crop&s=423b2b8c9a9d7a6b2d5e9c4f3b1a2c3d",
-      "https://images.unsplash.com/photo-1510627498534-cf7e9002facc?q=80&w=800&auto=format&fit=crop&s=2c4f1f7a8b6a5c3e9b4d2e8a7c6f1b3a",
-      "https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=800&auto=format&fit=crop&s=3a6b7c8d9e1f0a2b3c4d5e6f7a8b9c0d"
-    ];
+      const feat2Images = [
+        "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1510627498534-cf7e9002facc?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80"
+      ];
 
-    const feat3Images = [
-      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800&auto=format&fit=crop&s=6c0a2f5a3b6a7a6d9c8c9e5b4a2c6d7f",
-      "https://images.unsplash.com/photo-1467003909585-2f8a72700288?q=80&w=800&auto=format&fit=crop&s=cc1e3a4b5d6f7a8b9c0d1e2f3a4b5c6d",
-      "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=800&auto=format&fit=crop&s=ad3c5f7b8e9f1a2b3c4d5e6f7a8b9c0d",
-      "https://images.unsplash.com/photo-1541542684-6b7f2b0b1a7b?q=80&w=800&auto=format&fit=crop&s=b5b9d6fb5a9f7bbd9f2c469e7f1c1d22"
-    ];
+      const feat3Images = [
+        "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80"
+      ];
 
-    // Elements
-    const heroImgEl = document.getElementById('heroImgEl');
-    const feat1Img = document.getElementById('feat1Img');
-    const feat2Img = document.getElementById('feat2Img');
-    const feat3Img = document.getElementById('feat3Img');
+      // Elements — safe lookup
+      const heroImgEl = document.getElementById('heroImgEl');
+      const feat1Img = document.getElementById('feat1Img');
+      const feat2Img = document.getElementById('feat2Img');
+      const feat3Img = document.getElementById('feat3Img');
+      const heroContainer = document.getElementById('heroImage');
+      const feat1Container = document.getElementById('feat1');
+      const feat2Container = document.getElementById('feat2');
+      const feat3Container = document.getElementById('feat3');
 
-    // current indexes
-    const idx = { hero: 0, f1: 0, f2: 0, f3: 0 };
+      // verify elements exist
+      if (!heroImgEl || !feat1Img || !feat2Img || !feat3Img) {
+        console.warn("One or more image elements not found. IDs must match: heroImgEl, feat1Img, feat2Img, feat3Img");
+        return;
+      }
 
-    // preload helper
-    function preloadList(list){
-      list.forEach(src => { const i = new Image(); i.src = src; });
-    }
+      // current indexes
+      const idx = { hero: 0, f1: 0, f2: 0, f3: 0 };
 
-    // initialize images and preload
-    function initImages(){
-      heroImgEl.src = heroImages[idx.hero];
-      feat1Img.src = feat1Images[idx.f1];
-      feat2Img.src = feat2Images[idx.f2];
-      feat3Img.src = feat3Images[idx.f3];
+      // preload helper (to make swaps smooth)
+      function preloadList(list){
+        list.forEach(src => { const i = new Image(); i.src = src; });
+      }
 
-      preloadList(heroImages);
-      preloadList(feat1Images);
-      preloadList(feat2Images);
-      preloadList(feat3Images);
-    }
+      // set image with fallback in case an URL fails
+      function setImageWithFallback(imgEl, src, fallback) {
+        imgEl.src = src;
+        imgEl.onerror = () => {
+          console.warn("Image failed to load, using fallback:", src);
+          imgEl.src = fallback;
+        };
+      }
 
-    // swap function with fade
-    async function swapImage(el, list, key){
-      // fade out
-      el.classList.add('fade-out');
-      await new Promise(r => setTimeout(r, 180)); // wait for fade
-      // next index
-      idx[key] = (idx[key] + 1) % list.length;
-      el.src = list[idx[key]];
-      // fade in
-      el.classList.remove('fade-out');
-      el.classList.add('fade-in');
-      setTimeout(()=> el.classList.remove('fade-in'), 250);
-    }
+      // initialize images and preload
+      function initImages(){
+        // fallback small neutral image (data URI)
+        const fallback = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
+          '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="100%" height="100%" fill="#ddd"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#666" font-size="22">Image not available</text></svg>'
+        );
 
-    // wire clicks
-    document.getElementById('heroImage').addEventListener('click', () => swapImage(heroImgEl, heroImages, 'hero'));
-    document.getElementById('feat1').addEventListener('click', () => swapImage(feat1Img, feat1Images, 'f1'));
-    document.getElementById('feat2').addEventListener('click', () => swapImage(feat2Img, feat2Images, 'f2'));
-    document.getElementById('feat3').addEventListener('click', () => swapImage(feat3Img, feat3Images, 'f3'));
+        setImageWithFallback(heroImgEl, heroImages[idx.hero], fallback);
+        setImageWithFallback(feat1Img, feat1Images[idx.f1], fallback);
+        setImageWithFallback(feat2Img, feat2Images[idx.f2], fallback);
+        setImageWithFallback(feat3Img, feat3Images[idx.f3], fallback);
 
-    // small safety for keyboard users: Enter/Space will also swap when focused
-    ['heroImage','feat1','feat2','feat3'].forEach(id=>{
-      const el = document.getElementById(id);
-      el.tabIndex = 0;
-      el.addEventListener('keydown', e => {
-        if(e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          el.click();
-        }
+        preloadList(heroImages);
+        preloadList(feat1Images);
+        preloadList(feat2Images);
+        preloadList(feat3Images);
+      }
+
+      // swap function with fade
+      async function swapImage(el, list, key){
+        if(!el) return;
+        el.classList.add('fade-out');
+        await new Promise(r => setTimeout(r, 180));
+        idx[key] = (idx[key] + 1) % list.length;
+        // set with fallback
+        const fallback = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
+          '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="100%" height="100%" fill="#ddd"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#666" font-size="22">Image not available</text></svg>'
+        );
+        el.src = list[idx[key]];
+        el.onerror = () => { el.src = fallback; };
+        el.classList.remove('fade-out');
+        el.classList.add('fade-in');
+        setTimeout(()=> el.classList.remove('fade-in'), 300);
+      }
+
+      // wire clicks (checking container exists)
+      if (heroContainer) heroContainer.addEventListener('click', () => swapImage(heroImgEl, heroImages, 'hero'));
+      if (feat1Container) feat1Container.addEventListener('click', () => swapImage(feat1Img, feat1Images, 'f1'));
+      if (feat2Container) feat2Container.addEventListener('click', () => swapImage(feat2Img, feat2Images, 'f2'));
+      if (feat3Container) feat3Container.addEventListener('click', () => swapImage(feat3Img, feat3Images, 'f3'));
+
+      // keyboard accessibility
+      ['heroImage','feat1','feat2','feat3'].forEach(id=>{
+        const el = document.getElementById(id);
+        if(!el) return;
+        el.tabIndex = 0;
+        el.addEventListener('keydown', e => {
+          if(e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            el.click();
+          }
+        });
       });
-    });
 
-    // init
-    initImages();
+      // footer year + small UI handlers (safe guards)
+      const yearEl = document.getElementById('year');
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-    // other UI handlers
-    document.getElementById('year').textContent = new Date().getFullYear();
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      localStorage.removeItem('isLoggedIn');
-      window.location.href = 'login.html';
-    });
-    document.getElementById('reserveBtn').addEventListener('click', () => {
-      window.location.href = 'contact.html';
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('isLoggedIn');
+        window.location.href = 'login.html';
+      });
+
+      const reserveBtn = document.getElementById('reserveBtn');
+      if (reserveBtn) reserveBtn.addEventListener('click', () => {
+        window.location.href = 'contact.html';
+      });
+
+      // Start
+      initImages();
     });
   </script>
 </body>
