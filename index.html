@@ -2,14 +2,31 @@
 <html lang="en">
 
 <head>
+
+    <!-- ✅ Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- ✅ Supabase Setup -->
+    <script>
+        const SUPABASE_URL = "https://pwlqaduqyixyoavyfupx.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3bHFhdWR1eXhpeW9hdmZ5dXB4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4NDIyMDEsImV4cCI6MjA4MDQxODIwMX0.iHqBEG6fA8MPM0eo6pRkIwxtmQ0_6OEpMVkTr3ZY964";
+
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        console.log("Supabase Connected:", supabase);
+    </script>
+
+    <!-- Redirect if not logged in -->
     <script>
         if (localStorage.getItem("isLoggedIn") !== "true") {
             window.location.href = "login.html";
         }
     </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diamond Restro & Bar - Home</title>
+
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -143,42 +160,38 @@
             }
         }
     </style>
+
 </head>
 
 <body>
 
     <header>
-        <!-- Left: Logo -->
         <div style="flex: 1; display: flex; align-items: center;">
             <img src="https://shorturl.at/4Stns" alt="Diamond Logo">
         </div>
 
-        <!-- Center: Heading -->
         <div style="flex: 1; text-align: center;">
             <h1>DIAMOND RESTRO AND BAR</h1>
         </div>
 
-        <!-- Right: Logout Button -->
         <div style="flex: 1; display: flex; justify-content: flex-end; align-items: center;">
             <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
     </header>
 
- <nav>
-  <a href="index.html">Home</a> |
-  <a href="menu.html">Menu</a> |
-  <a href="contact.html">Contact Us</a>
-</nav>
-
-
+    <nav>
+        <a href="index.html">Home</a> |
+        <a href="menu.html">Menu</a> |
+        <a href="contact.html">Contact Us</a>
+    </nav>
 
     <section id="contentSection">
         <h2>WELCOME TO DIAMOND RESTRO & BAR</h2>
-        <p>At Diamond Restro & Bar, we bring sparkle to every plate and pour. Since opening in 2023, we’ve been serving a perfect fusion of gourmet dining and vibrant bar vibes.</p>
-        <p>Whether you're here for a casual evening out, a romantic dinner, or a lively night with friends, we offer an atmosphere that's both sophisticated and welcoming. Our chefs craft each dish with precision and flair, blending bold flavors, fresh ingredients, and artistic presentation. From sizzling appetizers to decadent desserts, every bite is a gem.</p>
-        <p>Our bar is the heart of the energy—shaking, stirring, and pouring signature cocktails, premium spirits, and curated wines. Sip under ambient lighting, enjoy live music or DJ nights, and let your evenings shimmer with unforgettable moments.</p>
+        <p>At Diamond Restro & Bar, we bring sparkle to every plate and pour...</p>
+
         <p class="animated-paragraph">
-            Join us for a dining experience that blends bold flavors with cozy elegance — only at <strong>Diamond Restro & Bar</strong>.
+            Join us for a dining experience that blends bold flavors with cozy elegance — only at 
+            <strong>Diamond Restro & Bar</strong>.
         </p>
     </section>
 
@@ -192,5 +205,3 @@
 </body>
 
 </html>
-
-
