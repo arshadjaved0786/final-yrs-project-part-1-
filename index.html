@@ -7,23 +7,15 @@
   <meta name="description" content="Diamond Restro & Bar — Delicious food, handcrafted drinks and a warm atmosphere. View menu, contact, order and track." />
   <link rel="icon" href="https://shorturl.at/4Stns" />
 
-  <!--
-    NOTE: If you want to use Supabase client here, replace the ANON key below.
-    Do NOT paste your service_role key into client code.
-  -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
   <script>
-    // Optional: initialize Supabase if you want client-side auth later.
-    // Replace the ANON key string below with your project's anon public key before enabling.
+    // If you enable Supabase client here later, replace the anon key below.
     const SUPABASE_URL = "https://pwlqaduqyixyoavyfupx.supabase.co";
-    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY"; // <-- REPLACE THIS if using Supabase auth
-    // const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+    // const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   </script>
 
   <style>
-    /* =========================
-       Design tokens & reset
-       ========================= */
     :root{
       --bg-dark: #0f1720;
       --accent: #ffb703;
@@ -45,9 +37,6 @@
     a { color:inherit; text-decoration:none; }
     img{display:block;max-width:100%}
 
-    /* =========================
-       Header
-       ========================= */
     header {
       background: linear-gradient(90deg,#1f2933 0%, #111827 100%);
       color:var(--text-color-light);
@@ -94,9 +83,6 @@
       background:transparent;color:var(--text-color-light);border:1px solid rgba(255,255,255,0.06);
     }
 
-    /* =========================
-       Main container / hero
-       ========================= */
     main.container {
       max-width:var(--max-width);
       margin:34px auto;
@@ -115,7 +101,6 @@
       box-shadow:0 30px 60px rgba(0,0,0,0.25);
     }
 
-    /* left column: big visual */
     .hero-left{
       position:relative;
       min-height:400px;
@@ -130,7 +115,6 @@
     .hero-left img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.02);transition:transform 800ms ease}
     .hero-left:hover img { transform:scale(1.05) }
 
-    /* right column: content card */
     .hero-right{
       padding:40px;
       display:flex;
@@ -149,7 +133,6 @@
     }
     p.lead { color:#333; font-size:15px; line-height:1.6; margin:0 }
 
-    /* info card with read-more */
     .card {
       margin-top:8px;
       background:var(--glass);
@@ -173,9 +156,22 @@
     .btn.secondary { background:#111; color:#fff; box-shadow:none }
     .meta { color:var(--muted); font-size:13px }
 
-    /* =========================
-       Footer
-       ========================= */
+    /* feature images row */
+    .features {
+      display:flex;
+      gap:10px;
+      margin-top:10px;
+      align-items:center;
+    }
+    .feature {
+      flex:1;
+      border-radius:10px;
+      overflow:hidden;
+      min-height:80px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+    .feature img { width:100%; height:100%; object-fit:cover; display:block; }
+
     footer {
       max-width:var(--max-width);
       margin:26px auto;
@@ -185,9 +181,6 @@
       font-size:14px;
     }
 
-    /* =========================
-       Responsive
-       ========================= */
     @media (max-width:1100px){
       .hero{grid-template-columns: 1fr; grid-auto-rows:auto}
       .hero-left{min-height:300px}
@@ -196,19 +189,17 @@
     @media (max-width:420px){
       header { padding:12px 10px }
       .brand img{width:56px;height:56px}
-      .header-center { display:none } /* save space on tiny devices */
+      .header-center { display:none }
     }
   </style>
 </head>
 <body>
 
-  <!-- Simple client-side login check (keeps your original behavior) -->
+  <!-- Keep your original redirect behavior commented out for preview if needed -->
   <script>
-    // If you rely on localStorage login flag:
-    // If you want to test locally during development, comment the redirect line.
-    if (localStorage.getItem("isLoggedIn") !== "true") {
-      // window.location.href = "login.html"; // disable if you want to preview without login
-    }
+    // if (localStorage.getItem("isLoggedIn") !== "true") {
+    //   window.location.href = "login.html";
+    // }
   </script>
 
   <header role="banner" aria-label="Main header">
@@ -236,16 +227,15 @@
   </header>
 
   <main class="container" role="main">
-    <!-- HERO -->
     <section class="hero" aria-labelledby="home-title">
-      <!-- left visual -->
+      <!-- LEFT: large attractive photo (hero) -->
       <div class="hero-left" aria-hidden="true">
-        <!-- Replace this image with a high-quality photo from your restaurant (keeps layout) -->
-        <img src="https://images.unsplash.com/photo-1541542684-6b7f2b0b1a7b?q=80&w=1600&auto=format&fit=crop&s=3d7efbff2b7fbdc8cf1d44503a76b9d1"
-             alt="Assortment of dishes on a restaurant table" />
+        <!-- high-quality restaurant/dishes photo -->
+        <img src="https://images.unsplash.com/photo-1543353071-873f17a7a088?q=80&w=1600&auto=format&fit=crop&s=b5b9d6fb5a9f7bbd9f2c469e7f1c1d22"
+             alt="Assortment of stylish plated dishes on a restaurant table" />
       </div>
 
-      <!-- right content -->
+      <!-- RIGHT: content -->
       <div class="hero-right">
         <div class="eyebrow">WELCOME</div>
         <h2 id="home-title" class="title">Welcome to Diamond Restro & Bar</h2>
@@ -257,7 +247,6 @@
         <article class="card" aria-labelledby="about-heading">
           <h3 id="about-heading" style="font-size:16px;margin-bottom:8px;color:#222">About us</h3>
 
-          <!-- Longer informative paragraphs (professional text you asked to add) -->
           <p>
             Whether you're here for a casual evening out, a romantic dinner, or a lively night with friends, we offer an atmosphere that's both sophisticated and welcoming. Our chefs craft each dish with precision and flair, blending bold flavors, fresh ingredients, and artistic presentation. From sizzling appetizers to decadent desserts, every bite is a gem.
           </p>
@@ -265,6 +254,22 @@
           <p>
             Our bar is the heart of the energy — shaking, stirring, and pouring signature cocktails, premium spirits, and curated wines. Sip under ambient lighting, enjoy live music or DJ nights, and let your evenings shimmer with unforgettable moments.
           </p>
+
+          <!-- small feature images row to make the card lively -->
+          <div class="features" aria-hidden="true">
+            <div class="feature" title="Signature Dish">
+              <img src="https://images.unsplash.com/photo-1604908813403-df2a3b2c9b64?q=80&w=800&auto=format&fit=crop&s=0d6bcdc1b8b9b3f9e8f4a1c6a0c3a8d4"
+                   alt="Signature plated dish" />
+            </div>
+            <div class="feature" title="Cocktails & Drinks">
+              <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop&s=5b87329a7b712f7b0b7b1c8b2f2b9b4a"
+                   alt="Cocktail on bar counter" />
+            </div>
+            <div class="feature" title="Ambience">
+              <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800&auto=format&fit=crop&s=6c0a2f5a3b6a7a6d9c8c9e5b4a2c6d7f"
+                   alt="Cozy restaurant ambience with lights" />
+            </div>
+          </div>
 
           <div class="fade" id="cardFade" aria-hidden="true"></div>
         </article>
@@ -287,26 +292,18 @@
     </div>
   </footer>
 
-  <!-- Small, clean scripts -->
   <script>
-    // Display current year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Logout handler (keeps consistent with your localStorage auth method)
     document.getElementById('logoutBtn').addEventListener('click', () => {
       localStorage.removeItem('isLoggedIn');
-      // go to login page if you have one
       window.location.href = 'login.html';
     });
 
-    // Reserve button (example) — you can wire this to a booking page or modal
     document.getElementById('reserveBtn').addEventListener('click', () => {
-      // If you have a booking page:
       window.location.href = 'contact.html';
-      // Or show a modal / form here
     });
 
-    /* Accessibility: remove the fade overlay if user prefers reduced motion / prefers reduced transparency */
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       const fade = document.getElementById('cardFade');
       if (fade) fade.style.display = 'none';
