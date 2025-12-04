@@ -3,8 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <title>Sign Up | Diamond Restro & Bar</title>
+
+  <!-- Supabase JS (v2) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+
   <style>
-    /* Background Slideshow */
+    /* Background Slideshow (kept exactly as you provided) */
     .bg-slideshow {
       position: fixed;
       top: 0;
@@ -55,6 +59,8 @@
       align-items: center;
       height: 100vh;
       overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     .container {
@@ -64,62 +70,106 @@
       border-radius: 15px;
       box-shadow: 0 0 20px rgba(0,0,0,0.3);
       width: 90%;
-      max-width: 350px;
+      max-width: 380px;
       text-align: center;
       z-index: 1;
+      transform: translateY(6px);
+      animation: popIn 420ms ease both;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(18px) scale(0.99); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     h2 {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       color: #333;
+      font-weight: 700;
+      font-size: 22px;
+      letter-spacing: 0.2px;
+    }
+
+    label {
+      display: block;
+      text-align: left;
       font-weight: 600;
+      color: #444;
+      margin-top: 8px;
+      margin-bottom: 6px;
+      font-size: 13px;
     }
 
     input {
       width: 100%;
       padding: 12px;
-      margin: 10px 0;
-      border: 2px solid #ccc;
+      margin: 6px 0 10px 0;
+      border: 2px solid #e0e0e0;
       border-radius: 8px;
       font-size: 15px;
-      transition: 0.3s;
+      transition: box-shadow 0.2s, border-color 0.2s;
+      background: #fff;
     }
 
     input:focus {
       border-color: #00c6ff;
       outline: none;
+      box-shadow: 0 6px 18px rgba(0,198,255,0.08);
+    }
+
+    .row {
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+
+    .half {
+      flex:1;
     }
 
     button {
       width: 100%;
       padding: 12px;
       font-size: 16px;
-      margin-top: 10px;
+      margin-top: 12px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      background-color: #4CAF50;
-      color: white;
-      transition: background 0.3s, transform 0.2s;
+      background-color: #0ea5a5;
+      color: #fff;
+      font-weight: 800;
+      transition: background 0.25s ease, transform 0.12s ease, box-shadow 0.12s;
+      box-shadow: 0 8px 24px rgba(14,165,165,0.12);
     }
 
-    button:hover {
-      background-color: #45a049;
-      transform: scale(1.05);
-      box-shadow: 0 0 10px #45a049;
+    button:active { transform: translateY(1px); }
+    button:hover { background-color: #089191; box-shadow: 0 12px 30px rgba(14,165,165,0.14); }
+
+    .note {
+      font-size: 13px;
+      color: #666;
+      margin-top: 10px;
     }
 
-    @media (max-width: 480px) {
-      .container {
-        padding: 20px 15px;
-      }
+    .msg {
+      margin-top: 12px;
+      font-size: 14px;
+      min-height:18px;
+    }
+
+    .msg.success { color: green; }
+    .msg.error { color: #c53030; }
+
+    @media (max-width:480px){
+      .container { padding:20px 16px; max-width: 94%; }
+      h2 { font-size:20px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Background Slideshow -->
-  <div class="bg-slideshow">
+  <!-- Background Slideshow (kept same images & animations) -->
+  <div class="bg-slideshow" aria-hidden="true">
     <div class="bg-slide"></div>
     <div class="bg-slide"></div>
     <div class="bg-slide"></div>
@@ -128,28 +178,118 @@
     <div class="overlay"></div>
   </div>
 
-  <!-- Sign-Up Form -->
-  <div class="container">
-    <h2>Create Your Account</h2>
-    <input type="text" id="signupUsername" placeholder="Choose a Username">
-    <input type="password" id="signupPassword" placeholder="Choose a Password">
-    <button onclick="signup()">Sign Up</button>
+  <!-- Sign-Up Form (UI preserved) -->
+  <div class="container" role="main" aria-labelledby="signup-heading">
+    <h2 id="signup-heading">Create Your Account</h2>
+
+    <label for="email">Email</label>
+    <input id="email" type="email" placeholder="you@example.com" autocomplete="email" />
+
+    <label for="password">Password</label>
+    <input id="password" type="password" placeholder="Choose a strong password (min 6 chars)" autocomplete="new-password" />
+
+    <label for="confirm">Confirm Password</label>
+    <input id="confirm" type="password" placeholder="Repeat your password" autocomplete="new-password" />
+
+    <button id="signupBtn" aria-live="polite">Sign Up</button>
+
+    <div class="msg" id="msg" role="status" aria-live="polite"></div>
+
+    <div class="note">Already have an account? <a href="login.html">Login</a></div>
   </div>
 
   <script>
-    function signup() {
-      const username = document.getElementById('signupUsername').value.trim();
-      const password = document.getElementById('signupPassword').value.trim();
+    // ---------- Supabase config ----------
+    // Your Supabase project URL & anon key (public)
+    const SUPABASE_URL = "https://pwlqaduqyixyoavyfupx.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3bHFhdWR1eXhpeW9hdmZ5dXB4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4NDIyMDEsImV4cCI6MjA4MDQxODIwMX0.iHqBEG6fA8MPM0eo6pRkIwxtmQ0_6OEpMVkTr3ZY964";
 
-      if (username && password) {
-        localStorage.setItem("user_" + username, password);
-        alert("Account created successfully! Please log in.");
-        window.location.href = "login.html";
-      } else {
-        alert("Please enter both username and password.");
-      }
+    // Create Supabase client
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ---------- Elements ----------
+    const emailEl = document.getElementById('email');
+    const passwordEl = document.getElementById('password');
+    const confirmEl = document.getElementById('confirm');
+    const signupBtn = document.getElementById('signupBtn');
+    const msgEl = document.getElementById('msg');
+
+    // Utility to show messages
+    function showMessage(text, type = 'error') {
+      msgEl.textContent = text;
+      msgEl.className = 'msg ' + (type === 'success' ? 'success' : 'error');
     }
-  </script>
 
+    // Basic client-side validation
+    function validateInputs(email, password, confirm) {
+      if (!email) return 'Please enter an email.';
+      // very simple email format check
+      if (!/^\S+@\S+\.\S+$/.test(email)) return 'Please enter a valid email address.';
+      if (!password) return 'Please enter a password.';
+      if (password.length < 6) return 'Password should be at least 6 characters.';
+      if (password !== confirm) return 'Passwords do not match.';
+      return null;
+    }
+
+    // Signup handler
+    signupBtn.addEventListener('click', async () => {
+      const email = emailEl.value.trim();
+      const password = passwordEl.value;
+      const confirm = confirmEl.value;
+
+      // clear previous message
+      showMessage('', 'error');
+
+      const validationError = validateInputs(email, password, confirm);
+      if (validationError) {
+        showMessage(validationError, 'error');
+        return;
+      }
+
+      // disable button while calling
+      signupBtn.disabled = true;
+      signupBtn.style.opacity = '0.8';
+      showMessage('Creating account...', 'success');
+
+      try {
+        // Use Supabase auth to sign up user
+        // This will send a confirmation email if email confirmations are enabled in Supabase
+        const { data, error } = await supabase.auth.signUp({ email, password });
+
+        if (error) {
+          // show friendly message
+          showMessage(error.message || 'Signup failed. Try again.', 'error');
+          signupBtn.disabled = false;
+          signupBtn.style.opacity = '1';
+          return;
+        }
+
+        // On success, supabase returns data.user and data.session (session may be null if email confirmations are required)
+        // We'll show a success message with next steps
+        showMessage('Account created successfully! Please check your email for confirmation (if required). Redirecting to login...', 'success');
+
+        // Optional: store a simple flag for backward compatibility (not needed if you rely on Supabase session)
+        // localStorage.setItem('isLoggedIn', 'true');
+        // localStorage.setItem('userEmail', email);
+
+        // redirect to login after a short delay so user sees message
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 1600);
+      } catch (err) {
+        console.error('Signup exception', err);
+        showMessage('An unexpected error occurred. Please try again.', 'error');
+        signupBtn.disabled = false;
+        signupBtn.style.opacity = '1';
+      }
+    });
+
+    // Pressing Enter in password confirm also triggers sign up
+    [emailEl, passwordEl, confirmEl].forEach(el => {
+      el.addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') signupBtn.click();
+      });
+    });
+  </script>
 </body>
 </html>
