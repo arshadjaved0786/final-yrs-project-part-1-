@@ -7,39 +7,26 @@
   <meta name="description" content="Diamond Restro & Bar — Delicious food, handcrafted drinks and a warm atmosphere. View menu, contact, order and track." />
   <link rel="icon" href="https://shorturl.at/4Stns" />
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
-  <script>
-    // If you enable Supabase client here later, replace the anon key below.
-    const SUPABASE_URL = "https://pwlqaduqyixyoavyfupx.supabase.co";
-    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
-    // const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  </script>
-
   <style>
     :root{
-      --bg-dark: #0f1720;
       --accent: #ffb703;
       --muted: #9aa3a8;
-      --card: rgba(255,255,255,0.06);
       --glass: rgba(255,255,255,0.08);
       --shadow: 0 12px 30px rgba(2,6,23,0.55);
       --radius: 14px;
       --max-width: 1150px;
-      --text-color-dark: #111;
-      --text-color-light: #f6f7f9;
       --brand-font: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     }
-
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%;font-family:var(--brand-font);background:
       linear-gradient(180deg,#f4f5f6 0%, #dcdcdc 30%, #333 100%);
-      color:var(--text-color-dark);-webkit-font-smoothing:antialiased}
+      -webkit-font-smoothing:antialiased}
     a { color:inherit; text-decoration:none; }
     img{display:block;max-width:100%}
 
     header {
       background: linear-gradient(90deg,#1f2933 0%, #111827 100%);
-      color:var(--text-color-light);
+      color:#f6f7f9;
       padding:18px 20px;
       display:flex;
       align-items:center;
@@ -47,139 +34,56 @@
       box-shadow:var(--shadow);
       position:sticky; top:0; z-index:40;
     }
-
-    .brand {
-      display:flex;
-      align-items:center;
-      gap:12px;
-      flex:0 0 auto;
-    }
+    .brand { display:flex; align-items:center; gap:12px; flex:0 0 auto; }
     .brand img { width:72px; height:72px; border-radius:50%; object-fit:cover; border:3px solid rgba(255,255,255,0.08); background:#fff; }
-    .brand h1 { font-size:20px; letter-spacing:0.6px; margin:0; color:var(--text-color-light) }
+    .brand h1 { font-size:20px; margin:0; color:#f6f7f9 }
 
     .header-center { flex:1; text-align:center; }
     .header-center nav { display:inline-flex; gap:18px; align-items:center; }
-    .header-center nav a {
-      color:rgba(255,255,255,0.85);
-      font-weight:600;
-      padding:8px 12px;
-      border-radius:8px;
-      transition:all .18s ease;
-    }
+    .header-center nav a { color:rgba(255,255,255,0.85); font-weight:600; padding:8px 12px; border-radius:8px; transition:all .18s ease; }
     .header-center nav a:hover { transform:translateY(-2px); background:rgba(255,255,255,0.02) }
 
     .header-actions { display:flex; gap:12px; align-items:center; }
-    .btn {
-      background:var(--accent);
-      color:#111;
-      padding:8px 14px;
-      border-radius:10px;
-      border:none;
-      font-weight:700;
-      cursor:pointer;
-      box-shadow:0 8px 20px rgba(255,183,3,0.12);
-    }
-    .btn.ghost {
-      background:transparent;color:var(--text-color-light);border:1px solid rgba(255,255,255,0.06);
-    }
+    .btn { background:var(--accent); color:#111; padding:8px 14px; border-radius:10px; border:none; font-weight:700; cursor:pointer; box-shadow:0 8px 20px rgba(255,183,3,0.12); }
+    .btn.ghost { background:transparent;color:#f6f7f9;border:1px solid rgba(255,255,255,0.06); }
 
-    main.container {
-      max-width:var(--max-width);
-      margin:34px auto;
-      padding:0 18px 60px;
-    }
+    main.container { max-width:var(--max-width); margin:34px auto; padding:0 18px 60px; }
 
     .hero {
-      display:grid;
-      grid-template-columns: 1fr 560px;
-      gap:26px;
-      align-items:stretch;
-      background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.88));
-      border-radius:var(--radius);
-      padding:0;
-      overflow:hidden;
-      box-shadow:0 30px 60px rgba(0,0,0,0.25);
+      display:grid; grid-template-columns: 1fr 560px; gap:26px; align-items:stretch;
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.98));
+      border-radius:var(--radius); overflow:hidden; box-shadow:0 30px 60px rgba(0,0,0,0.25);
     }
 
-    .hero-left{
-      position:relative;
-      min-height:400px;
-      overflow:hidden;
-    }
-    .hero-left::after{
-      content:"";
-      position:absolute;inset:0;background:
-      linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.28));
-      pointer-events:none;
-    }
-    .hero-left img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.02);transition:transform 800ms ease}
-    .hero-left:hover img { transform:scale(1.05) }
+    .hero-left{ position:relative; min-height:420px; overflow:hidden; cursor:pointer; }
+    .hero-left::after{ content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.18)); pointer-events:none; }
+    .hero-left img { width:100%; height:100%; object-fit:cover; display:block; transition:opacity 320ms ease, transform 700ms ease; opacity:1; transform:scale(1.02); }
+    .hero-left:hover img { transform:scale(1.05); }
 
-    .hero-right{
-      padding:40px;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      gap:14px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,248,248,0.98));
-    }
+    .hero-right{ padding:34px; display:flex; flex-direction:column; justify-content:center; gap:12px; background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,248,248,0.98)); }
 
     .eyebrow { font-size:13px; color:var(--muted); font-weight:700; letter-spacing:1px }
-    h2.title {
-      font-size:30px;
-      margin:2px 0 6px 0;
-      color:var(--text-color-dark);
-      letter-spacing:0.4px;
-    }
+    h2.title { font-size:30px; margin:2px 0 6px; color:#111; letter-spacing:.4px }
     p.lead { color:#333; font-size:15px; line-height:1.6; margin:0 }
 
-    .card {
-      margin-top:8px;
-      background:var(--glass);
-      padding:18px;
-      border-radius:12px;
-      box-shadow: 0 12px 36px rgba(2,6,23,0.12);
-      color: #111;
-      line-height:1.6;
-    }
-    .card p { margin:0 0 10px 0; color:#111 }
-    .card small { color:var(--muted) }
+    .card { margin-top:8px; background:var(--glass); padding:16px; border-radius:12px; box-shadow:0 12px 36px rgba(2,6,23,0.12); color:#111; line-height:1.6; }
+    .card p { margin:0 0 10px 0; }
+    .card .fade { height:62px; margin-top:-6px; background:linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%); display:block; }
 
-    .card .fade {
-      height:72px;
-      margin-top:-8px;
-      background:linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
-      display:block;
-    }
+    .features { display:flex; gap:10px; margin-top:12px; align-items:center; }
+    .feature { flex:1; border-radius:10px; overflow:hidden; min-height:78px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); cursor:pointer; position:relative; }
+    .feature img { width:100%; height:100%; object-fit:cover; display:block; transition:opacity 260ms ease, transform 420ms ease; }
+    .feature:hover img { transform:scale(1.04); }
 
     .actions-row { display:flex; gap:12px; align-items:center; margin-top:12px }
     .btn.secondary { background:#111; color:#fff; box-shadow:none }
     .meta { color:var(--muted); font-size:13px }
 
-    /* feature images row */
-    .features {
-      display:flex;
-      gap:10px;
-      margin-top:10px;
-      align-items:center;
-    }
-    .feature {
-      flex:1;
-      border-radius:10px;
-      overflow:hidden;
-      min-height:80px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-    }
-    .feature img { width:100%; height:100%; object-fit:cover; display:block; }
+    footer { max-width:var(--max-width); margin:26px auto; padding:26px 18px; color:#444; text-align:center; font-size:14px; }
 
-    footer {
-      max-width:var(--max-width);
-      margin:26px auto;
-      padding:26px 18px;
-      color:#444;
-      text-align:center;
-      font-size:14px;
-    }
+    /* small fade animation helper */
+    .fade-out { opacity:0; }
+    .fade-in { opacity:1; }
 
     @media (max-width:1100px){
       .hero{grid-template-columns: 1fr; grid-auto-rows:auto}
@@ -195,19 +99,12 @@
 </head>
 <body>
 
-  <!-- Keep your original redirect behavior commented out for preview if needed -->
-  <script>
-    // if (localStorage.getItem("isLoggedIn") !== "true") {
-    //   window.location.href = "login.html";
-    // }
-  </script>
-
-  <header role="banner" aria-label="Main header">
+  <header role="banner">
     <div class="brand" aria-hidden="false">
-      <img src="https://shorturl.at/4Stns" alt="Diamond Restro & Bar logo" />
+      <img src="https://shorturl.at/4Stns" alt="Diamond logo" />
       <div>
         <h1>Diamond Restro & Bar</h1>
-        <div class="meta" style="font-size:12px;color:rgba(255,255,255,0.7)">Fine dining & artisan drinks</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.7)">Fine dining & artisan drinks</div>
       </div>
     </div>
 
@@ -226,16 +123,13 @@
     </div>
   </header>
 
-  <main class="container" role="main">
+  <main class="container">
     <section class="hero" aria-labelledby="home-title">
-      <!-- LEFT: large attractive photo (hero) -->
-      <div class="hero-left" aria-hidden="true">
-        <!-- high-quality restaurant/dishes photo -->
-        <img src="https://images.unsplash.com/photo-1543353071-873f17a7a088?q=80&w=1600&auto=format&fit=crop&s=b5b9d6fb5a9f7bbd9f2c469e7f1c1d22"
-             alt="Assortment of stylish plated dishes on a restaurant table" />
+      <!-- HERO (click to rotate between 4 hero photos) -->
+      <div class="hero-left" id="heroImage" title="Click to view next hero image">
+        <img src="" alt="Dish or restaurant hero" id="heroImgEl" />
       </div>
 
-      <!-- RIGHT: content -->
       <div class="hero-right">
         <div class="eyebrow">WELCOME</div>
         <h2 id="home-title" class="title">Welcome to Diamond Restro & Bar</h2>
@@ -255,26 +149,22 @@
             Our bar is the heart of the energy — shaking, stirring, and pouring signature cocktails, premium spirits, and curated wines. Sip under ambient lighting, enjoy live music or DJ nights, and let your evenings shimmer with unforgettable moments.
           </p>
 
-          <!-- small feature images row to make the card lively -->
           <div class="features" aria-hidden="true">
-            <div class="feature" title="Signature Dish">
-              <img src="https://images.unsplash.com/photo-1604908813403-df2a3b2c9b64?q=80&w=800&auto=format&fit=crop&s=0d6bcdc1b8b9b3f9e8f4a1c6a0c3a8d4"
-                   alt="Signature plated dish" />
+            <div class="feature" id="feat1" title="Click to view next image">
+              <img src="" alt="Feature 1 - signature dish" id="feat1Img">
             </div>
-            <div class="feature" title="Cocktails & Drinks">
-              <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop&s=5b87329a7b712f7b0b7b1c8b2f2b9b4a"
-                   alt="Cocktail on bar counter" />
+            <div class="feature" id="feat2" title="Click to view next image">
+              <img src="" alt="Feature 2 - cocktails" id="feat2Img">
             </div>
-            <div class="feature" title="Ambience">
-              <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800&auto=format&fit=crop&s=6c0a2f5a3b6a7a6d9c8c9e5b4a2c6d7f"
-                   alt="Cozy restaurant ambience with lights" />
+            <div class="feature" id="feat3" title="Click to view next image">
+              <img src="" alt="Feature 3 - ambience" id="feat3Img">
             </div>
           </div>
 
           <div class="fade" id="cardFade" aria-hidden="true"></div>
         </article>
 
-        <div class="actions-row" role="toolbar" aria-label="Actions">
+        <div class="actions-row" role="toolbar">
           <button class="btn secondary" onclick="window.location.href='menu.html'">View Full Menu</button>
           <button class="btn" id="reserveBtn">Book a Table</button>
         </div>
@@ -293,21 +183,106 @@
   </footer>
 
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+    // ====== Image collections (4 images each) - professional Unsplash images ======
+    const heroImages = [
+      "https://images.unsplash.com/photo-1541542684-6b7f2b0b1a7b?q=80&w=1600&auto=format&fit=crop&s=b5b9d6fb5a9f7bbd9f2c469e7f1c1d22",
+      "https://images.unsplash.com/photo-1523292562223-88b5b6c2ec48?q=80&w=1600&auto=format&fit=crop&s=7a91b3a378a5f8d0a4fb817f3e3a4b35",
+      "https://images.unsplash.com/photo-1526318472351-c75fcf070db6?q=80&w=1600&auto=format&fit=crop&s=171b2b04b5b2d56b2ea6c6d4d6d9f8ea",
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1600&auto=format&fit=crop&s=6c0a2f5a3b6a7a6d9c8c9e5b4a2c6d7f"
+    ];
 
+    const feat1Images = [
+      "https://images.unsplash.com/photo-1604908813403-df2a3b2c9b64?q=80&w=800&auto=format&fit=crop&s=0d6bcdc1b8b9b3f9e8f4a1c6a0c3a8d4",
+      "https://images.unsplash.com/photo-1546069901-eacef0df6022?q=80&w=800&auto=format&fit=crop&s=9cf6d0e4b0088cc3b2d3f21a5d7f47b7",
+      "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=800&auto=format&fit=crop&s=62a2fbf4a47f1b3e9d6a0d4e4b9a8b3b",
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800&auto=format&fit=crop&s=6c0a2f5a3b6a7a6d9c8c9e5b4a2c6d7f"
+    ];
+
+    const feat2Images = [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop&s=5b87329a7b712f7b0b7b1c8b2f2b9b4a",
+      "https://images.unsplash.com/photo-1542444459-db8b2d8a2b5e?q=80&w=800&auto=format&fit=crop&s=423b2b8c9a9d7a6b2d5e9c4f3b1a2c3d",
+      "https://images.unsplash.com/photo-1510627498534-cf7e9002facc?q=80&w=800&auto=format&fit=crop&s=2c4f1f7a8b6a5c3e9b4d2e8a7c6f1b3a",
+      "https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=800&auto=format&fit=crop&s=3a6b7c8d9e1f0a2b3c4d5e6f7a8b9c0d"
+    ];
+
+    const feat3Images = [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800&auto=format&fit=crop&s=6c0a2f5a3b6a7a6d9c8c9e5b4a2c6d7f",
+      "https://images.unsplash.com/photo-1467003909585-2f8a72700288?q=80&w=800&auto=format&fit=crop&s=cc1e3a4b5d6f7a8b9c0d1e2f3a4b5c6d",
+      "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=800&auto=format&fit=crop&s=ad3c5f7b8e9f1a2b3c4d5e6f7a8b9c0d",
+      "https://images.unsplash.com/photo-1541542684-6b7f2b0b1a7b?q=80&w=800&auto=format&fit=crop&s=b5b9d6fb5a9f7bbd9f2c469e7f1c1d22"
+    ];
+
+    // Elements
+    const heroImgEl = document.getElementById('heroImgEl');
+    const feat1Img = document.getElementById('feat1Img');
+    const feat2Img = document.getElementById('feat2Img');
+    const feat3Img = document.getElementById('feat3Img');
+
+    // current indexes
+    const idx = { hero: 0, f1: 0, f2: 0, f3: 0 };
+
+    // preload helper
+    function preloadList(list){
+      list.forEach(src => { const i = new Image(); i.src = src; });
+    }
+
+    // initialize images and preload
+    function initImages(){
+      heroImgEl.src = heroImages[idx.hero];
+      feat1Img.src = feat1Images[idx.f1];
+      feat2Img.src = feat2Images[idx.f2];
+      feat3Img.src = feat3Images[idx.f3];
+
+      preloadList(heroImages);
+      preloadList(feat1Images);
+      preloadList(feat2Images);
+      preloadList(feat3Images);
+    }
+
+    // swap function with fade
+    async function swapImage(el, list, key){
+      // fade out
+      el.classList.add('fade-out');
+      await new Promise(r => setTimeout(r, 180)); // wait for fade
+      // next index
+      idx[key] = (idx[key] + 1) % list.length;
+      el.src = list[idx[key]];
+      // fade in
+      el.classList.remove('fade-out');
+      el.classList.add('fade-in');
+      setTimeout(()=> el.classList.remove('fade-in'), 250);
+    }
+
+    // wire clicks
+    document.getElementById('heroImage').addEventListener('click', () => swapImage(heroImgEl, heroImages, 'hero'));
+    document.getElementById('feat1').addEventListener('click', () => swapImage(feat1Img, feat1Images, 'f1'));
+    document.getElementById('feat2').addEventListener('click', () => swapImage(feat2Img, feat2Images, 'f2'));
+    document.getElementById('feat3').addEventListener('click', () => swapImage(feat3Img, feat3Images, 'f3'));
+
+    // small safety for keyboard users: Enter/Space will also swap when focused
+    ['heroImage','feat1','feat2','feat3'].forEach(id=>{
+      const el = document.getElementById(id);
+      el.tabIndex = 0;
+      el.addEventListener('keydown', e => {
+        if(e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          el.click();
+        }
+      });
+    });
+
+    // init
+    initImages();
+
+    // other UI handlers
+    document.getElementById('year').textContent = new Date().getFullYear();
     document.getElementById('logoutBtn').addEventListener('click', () => {
       localStorage.removeItem('isLoggedIn');
       window.location.href = 'login.html';
     });
-
     document.getElementById('reserveBtn').addEventListener('click', () => {
       window.location.href = 'contact.html';
     });
-
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const fade = document.getElementById('cardFade');
-      if (fade) fade.style.display = 'none';
-    }
   </script>
 </body>
 </html>
