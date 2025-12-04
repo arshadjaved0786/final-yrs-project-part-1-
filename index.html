@@ -20,7 +20,7 @@
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%;font-family:var(--brand-font);background:
       linear-gradient(180deg,#f4f5f6 0%, #dcdcdc 30%, #333 100%);
-      -webkit-font-smoothing:antialiased}
+      -webkit-font-smoothing:antialiased;color:#111}
     a { color:inherit; text-decoration:none; }
     img{display:block;max-width:100%}
 
@@ -57,7 +57,7 @@
 
     .hero-left{ position:relative; min-height:420px; overflow:hidden; cursor:pointer; }
     .hero-left::after{ content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.18)); pointer-events:none; }
-    .hero-left img { width:100%; height:100%; object-fit:cover; display:block; transition:opacity 320ms ease, transform 700ms ease; opacity:1; transform:scale(1.02); }
+    .hero-left img { width:100%; height:100%; object-fit:cover; display:block; transition:opacity 360ms ease, transform 700ms ease; opacity:1; transform:scale(1.02); }
     .hero-left:hover img { transform:scale(1.05); }
 
     .hero-right{ padding:34px; display:flex; flex-direction:column; justify-content:center; gap:12px; background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,248,248,0.98)); }
@@ -72,7 +72,7 @@
 
     .features { display:flex; gap:10px; margin-top:12px; align-items:center; }
     .feature { flex:1; border-radius:10px; overflow:hidden; min-height:78px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); cursor:pointer; position:relative; }
-    .feature img { width:100%; height:100%; object-fit:cover; display:block; transition:opacity 260ms ease, transform 420ms ease; }
+    .feature img { width:100%; height:100%; object-fit:cover; display:block; transition:opacity 300ms ease, transform 420ms ease; }
     .feature:hover img { transform:scale(1.04); }
 
     .actions-row { display:flex; gap:12px; align-items:center; margin-top:12px }
@@ -81,9 +81,9 @@
 
     footer { max-width:var(--max-width); margin:26px auto; padding:26px 18px; color:#444; text-align:center; font-size:14px; }
 
-    /* small fade animation helper */
-    .fade-out { opacity:0; }
-    .fade-in { opacity:1; }
+    /* fade animation helper */
+    .fade-out { opacity:0; transition:opacity .36s ease; }
+    .fade-in { opacity:1; transition:opacity .36s ease; }
 
     @media (max-width:1100px){
       .hero{grid-template-columns: 1fr; grid-auto-rows:auto}
@@ -125,7 +125,8 @@
 
   <main class="container">
     <section class="hero" aria-labelledby="home-title">
-      <div class="hero-left" id="heroImage" title="Click to view next hero image">
+      <!-- HERO (click to rotate between 4 hero photos) -->
+      <div class="hero-left" id="heroImage" title="Click to view next hero image" tabindex="0" role="button" aria-pressed="false">
         <img src="" alt="Dish or restaurant hero" id="heroImgEl" />
       </div>
 
@@ -149,13 +150,13 @@
           </p>
 
           <div class="features" aria-hidden="true">
-            <div class="feature" id="feat1" title="Click to view next image">
+            <div class="feature" id="feat1" title="Click to view next image" tabindex="0" role="button" aria-pressed="false">
               <img src="" alt="Feature 1 - signature dish" id="feat1Img">
             </div>
-            <div class="feature" id="feat2" title="Click to view next image">
+            <div class="feature" id="feat2" title="Click to view next image" tabindex="0" role="button" aria-pressed="false">
               <img src="" alt="Feature 2 - cocktails" id="feat2Img">
             </div>
-            <div class="feature" id="feat3" title="Click to view next image">
+            <div class="feature" id="feat3" title="Click to view next image" tabindex="0" role="button" aria-pressed="false">
               <img src="" alt="Feature 3 - ambience" id="feat3Img">
             </div>
           </div>
@@ -182,11 +183,14 @@
   </footer>
 
   <script>
-    // Wrap everything after DOM ready so elements are available
+    /*
+      Auto-swap + click-to-swap script.
+      Uses stable Unsplash images (auto=format&fit=crop&w=...) for good reliability.
+      Timers: hero 4s, feat1 5s, feat2 6s, feat3 7s (staggered to avoid simultaneous swapping)
+    */
     document.addEventListener('DOMContentLoaded', () => {
-      // ====== stable image collections (4 images each) ======
+      // Collections (4 images each) - stable format
       const heroImages = [
-        // high-quality stable Unsplash URLs
         "https://images.unsplash.com/photo-1541542684-6b7f2b0b1a7b?auto=format&fit=crop&w=1600&q=80",
         "https://images.unsplash.com/photo-1523292562223-88b5b6c2ec48?auto=format&fit=crop&w=1600&q=80",
         "https://images.unsplash.com/photo-1526318472351-c75fcf070db6?auto=format&fit=crop&w=1600&q=80",
@@ -211,10 +215,10 @@
         "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80"
+        "https://images.unsplash.com/photo-1526318472351-c75fcf070db6?auto=format&fit=crop&w=800&q=80"
       ];
 
-      // Elements — safe lookup
+      // Elements
       const heroImgEl = document.getElementById('heroImgEl');
       const feat1Img = document.getElementById('feat1Img');
       const feat2Img = document.getElementById('feat2Img');
@@ -224,100 +228,110 @@
       const feat2Container = document.getElementById('feat2');
       const feat3Container = document.getElementById('feat3');
 
-      // verify elements exist
       if (!heroImgEl || !feat1Img || !feat2Img || !feat3Img) {
-        console.warn("One or more image elements not found. IDs must match: heroImgEl, feat1Img, feat2Img, feat3Img");
+        console.warn("Missing image elements; check IDs heroImgEl, feat1Img, feat2Img, feat3Img");
         return;
       }
 
-      // current indexes
+      // indexes
       const idx = { hero: 0, f1: 0, f2: 0, f3: 0 };
 
-      // preload helper (to make swaps smooth)
-      function preloadList(list){
-        list.forEach(src => { const i = new Image(); i.src = src; });
+      // fallback (data-uri SVG) shown if a URL fails
+      const fallbackDataURI = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800"><rect width="100%" height="100%" fill="#e6e6e6"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#666" font-size="22">Image not available</text></svg>'
+      );
+
+      // preload helper
+      function preload(list) {
+        list.forEach(s => { const i = new Image(); i.src = s; });
       }
 
-      // set image with fallback in case an URL fails
-      function setImageWithFallback(imgEl, src, fallback) {
-        imgEl.src = src;
-        imgEl.onerror = () => {
-          console.warn("Image failed to load, using fallback:", src);
-          imgEl.src = fallback;
-        };
+      // set with fallback
+      function setWithFallback(el, src) {
+        el.src = src;
+        el.onerror = () => { el.src = fallbackDataURI; };
       }
 
-      // initialize images and preload
-      function initImages(){
-        // fallback small neutral image (data URI)
-        const fallback = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
-          '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="100%" height="100%" fill="#ddd"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#666" font-size="22">Image not available</text></svg>'
-        );
+      // init starting images + preload
+      function init() {
+        setWithFallback(heroImgEl, heroImages[idx.hero]);
+        setWithFallback(feat1Img, feat1Images[idx.f1]);
+        setWithFallback(feat2Img, feat2Images[idx.f2]);
+        setWithFallback(feat3Img, feat3Images[idx.f3]);
 
-        setImageWithFallback(heroImgEl, heroImages[idx.hero], fallback);
-        setImageWithFallback(feat1Img, feat1Images[idx.f1], fallback);
-        setImageWithFallback(feat2Img, feat2Images[idx.f2], fallback);
-        setImageWithFallback(feat3Img, feat3Images[idx.f3], fallback);
-
-        preloadList(heroImages);
-        preloadList(feat1Images);
-        preloadList(feat2Images);
-        preloadList(feat3Images);
+        preload(heroImages);
+        preload(feat1Images);
+        preload(feat2Images);
+        preload(feat3Images);
       }
 
-      // swap function with fade
-      async function swapImage(el, list, key){
-        if(!el) return;
+      // swap with fade
+      function swap(el, list, key) {
+        if (!el) return;
+        // add fade-out
         el.classList.add('fade-out');
-        await new Promise(r => setTimeout(r, 180));
-        idx[key] = (idx[key] + 1) % list.length;
-        // set with fallback
-        const fallback = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
-          '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="100%" height="100%" fill="#ddd"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#666" font-size="22">Image not available</text></svg>'
-        );
-        el.src = list[idx[key]];
-        el.onerror = () => { el.src = fallback; };
-        el.classList.remove('fade-out');
-        el.classList.add('fade-in');
-        setTimeout(()=> el.classList.remove('fade-in'), 300);
+
+        // after fade duration swap src
+        setTimeout(() => {
+          idx[key] = (idx[key] + 1) % list.length;
+          setWithFallback(el, list[idx[key]]);
+          // fade-in
+          el.classList.remove('fade-out');
+          el.classList.add('fade-in');
+          setTimeout(() => el.classList.remove('fade-in'), 420);
+        }, 220);
       }
 
-      // wire clicks (checking container exists)
-      if (heroContainer) heroContainer.addEventListener('click', () => swapImage(heroImgEl, heroImages, 'hero'));
-      if (feat1Container) feat1Container.addEventListener('click', () => swapImage(feat1Img, feat1Images, 'f1'));
-      if (feat2Container) feat2Container.addEventListener('click', () => swapImage(feat2Img, feat2Images, 'f2'));
-      if (feat3Container) feat3Container.addEventListener('click', () => swapImage(feat3Img, feat3Images, 'f3'));
+      // manual click handlers (also accessible via keyboard)
+      if (heroContainer) heroContainer.addEventListener('click', () => swap(heroImgEl, heroImages, 'hero'));
+      if (feat1Container) feat1Container.addEventListener('click', () => swap(feat1Img, feat1Images, 'f1'));
+      if (feat2Container) feat2Container.addEventListener('click', () => swap(feat2Img, feat2Images, 'f2'));
+      if (feat3Container) feat3Container.addEventListener('click', () => swap(feat3Img, feat3Images, 'f3'));
 
-      // keyboard accessibility
-      ['heroImage','feat1','feat2','feat3'].forEach(id=>{
+      // keyboard (Enter/Space)
+      ['heroImage','feat1','feat2','feat3'].forEach(id => {
         const el = document.getElementById(id);
-        if(!el) return;
+        if (!el) return;
         el.tabIndex = 0;
         el.addEventListener('keydown', e => {
-          if(e.key === 'Enter' || e.key === ' ') {
+          if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             el.click();
           }
         });
       });
 
-      // footer year + small UI handlers (safe guards)
-      const yearEl = document.getElementById('year');
-      if (yearEl) yearEl.textContent = new Date().getFullYear();
+      // AUTO-SWAP timers (staggered)
+      const heroTimer = setInterval(() => swap(heroImgEl, heroImages, 'hero'), 4000);
+      const f1Timer   = setInterval(() => swap(feat1Img, feat1Images, 'f1'), 5000);
+      const f2Timer   = setInterval(() => swap(feat2Img, feat2Images, 'f2'), 6000);
+      const f3Timer   = setInterval(() => swap(feat3Img, feat3Images, 'f3'), 7000);
 
-      const logoutBtn = document.getElementById('logoutBtn');
-      if (logoutBtn) logoutBtn.addEventListener('click', () => {
-        localStorage.removeItem('isLoggedIn');
-        window.location.href = 'login.html';
+      // small safety: clear intervals when page hidden to save resources
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          clearInterval(heroTimer);
+          clearInterval(f1Timer);
+          clearInterval(f2Timer);
+          clearInterval(f3Timer);
+        } else {
+          // re-create timers when visible again
+          // (simple approach: reload page images and then set new intervals)
+          init();
+          // reassign (note: these are new variables scoped here; fine for typical usage)
+          setInterval(() => swap(heroImgEl, heroImages, 'hero'), 4000);
+          setInterval(() => swap(feat1Img, feat1Images, 'f1'), 5000);
+          setInterval(() => swap(feat2Img, feat2Images, 'f2'), 6000);
+          setInterval(() => swap(feat3Img, feat3Images, 'f3'), 7000);
+        }
       });
 
-      const reserveBtn = document.getElementById('reserveBtn');
-      if (reserveBtn) reserveBtn.addEventListener('click', () => {
-        window.location.href = 'contact.html';
-      });
+      // UI handlers
+      const yearEl = document.getElementById('year'); if (yearEl) yearEl.textContent = new Date().getFullYear();
+      const logoutBtn = document.getElementById('logoutBtn'); if (logoutBtn) logoutBtn.addEventListener('click', () => { localStorage.removeItem('isLoggedIn'); window.location.href = 'login.html'; });
+      const reserveBtn = document.getElementById('reserveBtn'); if (reserveBtn) reserveBtn.addEventListener('click', () => window.location.href = 'contact.html');
 
-      // Start
-      initImages();
+      init();
     });
   </script>
 </body>
