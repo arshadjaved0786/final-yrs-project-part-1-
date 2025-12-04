@@ -1,28 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Login — Diamond Restro & Bar</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="UTF-8" />
+  <title>Login | Diamond Restro & Bar</title>
+
+  <!-- Supabase JS (v2) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+
   <style>
-    body{font-family:Segoe UI, Tahoma, sans-serif;background:linear-gradient(180deg,#f4f4f4,#ddd);display:flex;align-items:center;justify-content:center;height:100vh;margin:0}
-    .card{background:#fff;padding:22px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.12);width:360px}
-    h2{margin:0 0 12px;font-size:20px}
-    input{width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;margin:8px 0}
-    button{width:100%;padding:10px;border-radius:8px;border:none;background:#0ea5a5;color:#fff;font-weight:700;cursor:pointer}
-    .note{font-size:13px;color:#666;margin-top:10px;text-align:center}
+    /* Same slideshow background and container styling so both pages match */
+    .bg-slideshow { position: fixed; top:0; left:0; width:100%; height:100%; z-index:-2; }
+    .bg-slide { position:absolute; width:100%; height:100%; background-size:cover; background-position:center; opacity:0; animation:slideShow 25s infinite; }
+    .bg-slide:nth-child(1) { background-image:url('https://img.freepik.com/free-photo/restaurant-interior_1127-3394.jpg'); animation-delay:0s; }
+    .bg-slide:nth-child(2) { background-image:url('https://img.freepik.com/premium-photo/beautiful-interior-chairs-bar-counter-restaurant_713163-5412.jpg'); animation-delay:5s; }
+    .bg-slide:nth-child(3) { background-image:url('https://img.freepik.com/free-photo/cocktails-shaker-arrangement-night-club_23-2149093603.jpg'); animation-delay:10s; }
+    .bg-slide:nth-child(4) { background-image:url('https://img.freepik.com/premium-photo/glass-whiskey-with-ice-bar_93675-111256.jpg'); animation-delay:15s; }
+    .bg-slide:nth-child(5) { background-image:url('https://img.freepik.com/free-photo/restaurant-interior_1127-3392.jpg'); animation-delay:20s; }
+    @keyframes slideShow { 0%,100%{opacity:0;} 10%,30%{opacity:1;} 40%{opacity:0;} }
+    .overlay { position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:-1; }
+
+    body{ margin:0;padding:0;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display:flex;align-items:center;justify-content:center;height:100vh;overflow:hidden; }
+    .container{ position:relative;background:rgba(255,255,255,0.96); padding:30px 25px;border-radius:15px; box-shadow:0 0 22px rgba(0,0,0,0.28); width:90%; max-width:380px; text-align:center; z-index:1; animation:popIn .42s ease both; }
+    @keyframes popIn { from{opacity:0; transform:translateY(18px) scale(.99)} to{opacity:1; transform:none} }
+    h2{ margin-bottom:18px; color:#333; font-weight:700; font-size:22px; letter-spacing:.2px }
+    input{ width:100%; padding:12px; margin:6px 0 10px; border:2px solid #e0e0e0; border-radius:8px; font-size:15px; background:#fff }
+    input:focus{ border-color:#00c6ff; outline:none; box-shadow:0 6px 18px rgba(0,198,255,0.08) }
+    button{ width:100%; padding:12px; font-size:16px; margin-top:12px; border:none; border-radius:8px; cursor:pointer; background:#0ea5a5; color:#fff; font-weight:800; box-shadow:0 8px 24px rgba(14,165,165,.12) }
+    .secondary{ margin-top:10px; background:#fff; color:#333; border:1px solid #ddd; box-shadow:none }
+    .note{ font-size:13px; color:#666; margin-top:10px }
+    .msg{ margin-top:12px; font-size:14px; min-height:18px }
+    .msg.success{ color:green } .msg.error{ color:#c53030 }
+    .row{ display:flex; gap:8px; align-items:center; justify-content:center; margin-top:8px }
+    .link{ color:#0b7c7c; cursor:pointer; text-decoration:underline }
+    @media (max-width:480px){ .container{ padding:20px 16px } h2{ font-size:20px } }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h2>Login</h2>
-    <input id="email" type="email" placeholder="Email" />
-    <input id="password" type="password" placeholder="Password" />
-    <button id="loginBtn">Login</button>
-    <div class="note">New here? <a href="signup.html">Create account</a></div>
-    <p id="msg" style="color:red;font-size:13px;margin-top:8px"></p>
+
+  <div class="bg-slideshow" aria-hidden="true">
+    <div class="bg-slide"></div><div class="bg-slide"></div><div class="bg-slide"></div><div class="bg-slide"></div><div class="bg-slide"></div>
+    <div class="overlay"></div>
   </div>
+
+  <main class="container" role="main" aria-labelledby="login-heading">
+    <h2 id="login-heading">Login to Diamond Restro & Bar</h2>
+
+    <input id="email" type="email" placeholder="you@example.com" autocomplete="email" />
+    <input id="password" type="password" placeholder="Your password" autocomplete="current-password" />
+    <button id="loginBtn">Login</button>
+
+    <div class="row">
+      <button id="forgotBtn" class="secondary">Forgot password?</button>
+    </div>
+
+    <div class="msg" id="msg" role="status" aria-live="polite"></div>
+
+    <div class="note">Don't have an account? <a href="signup.html">Sign up</a></div>
+  </main>
 
   <script>
     // Supabase config
@@ -31,29 +65,79 @@
 
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    document.getElementById('loginBtn').addEventListener('click', async () => {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
-      const msg = document.getElementById('msg');
-      msg.textContent = '';
+    const emailEl = document.getElementById('email');
+    const passwordEl = document.getElementById('password');
+    const loginBtn = document.getElementById('loginBtn');
+    const forgotBtn = document.getElementById('forgotBtn');
+    const msgEl = document.getElementById('msg');
 
-      if (!email || !password) {
-        msg.textContent = 'Please enter email and password.';
-        return;
+    function showMessage(text, type='error'){
+      msgEl.textContent = text;
+      msgEl.className = 'msg ' + (type === 'success' ? 'success' : 'error');
+    }
+
+    loginBtn.addEventListener('click', async () => {
+      const email = emailEl.value.trim();
+      const password = passwordEl.value;
+      showMessage('', 'error');
+
+      if (!email || !password) { showMessage('Please enter email and password.','error'); return; }
+
+      loginBtn.disabled = true;
+      showMessage('Logging in...', 'success');
+
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+        if (error) {
+          showMessage(error.message || 'Login failed', 'error');
+          loginBtn.disabled = false;
+          return;
+        }
+
+        // success - data.user, data.session
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userEmail', data.user?.email || '');
+        // redirect to homepage
+        window.location.href = 'index.html';
+      } catch (err) {
+        console.error('Login exception', err);
+        showMessage('An unexpected error occurred. Try again.', 'error');
+        loginBtn.disabled = false;
       }
-
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-      if (error) {
-        msg.textContent = error.message;
-        return;
-      }
-
-      // Successful login — store small flag (optional) and redirect to home
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('userEmail', data.user?.email || '');
-      window.location.href = 'index.html';
     });
+
+    // Forgot password flow - send reset link
+    forgotBtn.addEventListener('click', async () => {
+      const email = emailEl.value.trim();
+      if (!email) { showMessage('Enter your email in the field above to receive reset instructions.', 'error'); return; }
+
+      forgotBtn.disabled = true;
+      showMessage('Sending reset email...', 'success');
+
+      try {
+        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin + '/login.html' // user returns to login page after reset
+        });
+
+        if (error) {
+          showMessage(error.message || 'Failed to send reset email', 'error');
+          forgotBtn.disabled = false;
+          return;
+        }
+
+        showMessage('Password reset email sent. Check your inbox.', 'success');
+      } catch (err) {
+        console.error('Reset exception', err);
+        showMessage('Error sending reset email. Try again later.', 'error');
+        forgotBtn.disabled = false;
+      }
+    });
+
+    // Enter key -> login
+    [emailEl, passwordEl].forEach(el => el.addEventListener('keyup', e => {
+      if (e.key === 'Enter') loginBtn.click();
+    }));
   </script>
 </body>
 </html>
