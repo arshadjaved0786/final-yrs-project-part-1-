@@ -3,59 +3,35 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Diamond Restro & Bar - Home</title>
+  <title>Diamond Restro & Bar — Home</title>
 
-  <!-- 1) Load Supabase library FIRST -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
 
   <style>
-    :root{
-      --bg1:#111;
-      --panel:#f3f3f3;
-      --accent:#00ffd1;
-      --muted:#bdbdbd;
-    }
-    body{
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      margin:0; background:linear-gradient(180deg,#ddd,#222);
-      color: #111;
-      min-height:100vh;
-    }
-    header{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:1rem; padding:16px 24px; background:linear-gradient(90deg,#222,#444);
-      color:white;
-    }
-    .brand{display:flex;align-items:center;gap:14px}
-    .brand img{width:72px;height:72px;border-radius:50%;object-fit:cover}
-    .brand h1{font-size:22px;margin:0; letter-spacing:1px}
-    nav a{color:#cfe; margin:0 10px; text-decoration:none; font-weight:600}
-    .controls{display:flex;align-items:center;gap:12px}
-    button{cursor:pointer;border-radius:8px;padding:8px 12px;border:none}
-    .logout-btn{background:#ff4d4d;color:white}
-    .cart-btn{background:#00b894;color:white}
-    main{max-width:1100px;margin:28px auto;padding:0 18px}
-    .hero{background:rgba(255,255,255,0.85); padding:28px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.25)}
-    .hero h2{margin:0 0 8px;color:#111}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;margin-top:18px}
-    .card{background:#fff;padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.12)}
-    .card img{width:100%;height:140px;object-fit:cover;border-radius:8px}
-    .card h3{margin:8px 0 6px;font-size:18px;color:#222}
-    .price{font-weight:700;color:#e64a19}
-    .small-muted{color:var(--muted);font-size:13px}
-    .cart-count{background:#ff6b6b;color:white;padding:4px 8px;border-radius:999px;font-weight:700}
-    footer{max-width:1100px;margin:28px auto;color:#333;padding:8px 18px}
-    .user-email{font-weight:700;color:var(--accent)}
+    /* (Use the same polished styles from the professional index earlier) */
+    :root{--accent:#ffb703;--muted:#9aa3a8}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Segoe UI, Tahoma, sans-serif;background:linear-gradient(180deg,#f4f5f6,#ddd);color:#111}
+    header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:linear-gradient(90deg,#1f2933,#111827);color:#fff}
+    header .brand{display:flex;gap:12px;align-items:center}
+    header .brand img{width:64px;height:64px;border-radius:50%}
+    header nav a{color:#e6eef0;margin:0 10px;text-decoration:none;font-weight:600}
+    .actions{display:flex;gap:12px;align-items:center}
+    .btn{padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
+    .btn.primary{background:var(--accent);color:#111}
+    main{max-width:1100px;margin:30px auto;padding:0 18px}
+    .welcome{background:#fff;padding:26px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.08)}
+    .user-email{font-weight:700;color:#0ea5a5}
   </style>
 </head>
 <body>
 
   <header>
     <div class="brand">
-      <img src="https://shorturl.at/4Stns" alt="Diamond logo">
+      <img src="https://shorturl.at/4Stns" alt="logo" />
       <div>
-        <h1>DIAMOND RESTRO & BAR</h1>
-        <div style="font-size:13px;color:#ddd">Fine food & warm vibes</div>
+        <div style="font-weight:800;font-size:20px">Diamond Restro & Bar</div>
+        <div style="font-size:12px;color:#bfc9cc">Fine dining & handcrafted drinks</div>
       </div>
     </div>
 
@@ -65,215 +41,74 @@
       <a href="contact.html">Contact</a>
     </nav>
 
-    <div class="controls">
-      <div id="signedInAs" class="small-muted">Not signed in</div>
-      <div id="cartPreview" style="display:flex;align-items:center;gap:8px">
-        <button class="cart-btn" onclick="goToCart()">Open Cart (<span id="cartCount">0</span>)</button>
-      </div>
-      <button class="logout-btn" id="logoutBtn" onclick="logout()">Logout</button>
+    <div class="actions">
+      <div id="signedInAs" style="color:#dbecee;font-weight:700">Checking...</div>
+      <button id="logoutBtn" class="btn primary">Logout</button>
     </div>
   </header>
 
   <main>
-    <section class="hero">
-      <h2>WELCOME TO DIAMOND RESTRO & BAR</h2>
-      <p class="small-muted">Join us for a dining experience that blends bold flavors with cozy elegance.</p>
-<p style="margin-top: 12px;">
-  Whether you're here for a casual evening out, a romantic dinner, or a lively night with friends, 
-  we offer an atmosphere that's both sophisticated and welcoming. Our chefs craft each dish with 
-  precision and flair, blending bold flavors, fresh ingredients, and artistic presentation. From 
-  sizzling appetizers to decadent desserts, every bite is a gem.
-</p>
+    <section class="welcome" id="heroSection">
+      <h2>Welcome to Diamond Restro & Bar</h2>
+      <p id="subtitle" style="color:var(--muted)">At Diamond Restro & Bar, we bring sparkle to every plate and pour.</p>
 
-<p style="margin-top: 12px;">
-  Our bar is the heart of the energy—shaking, stirring, and pouring signature cocktails, premium spirits, 
-  and curated wines. Sip under ambient lighting, enjoy live music or DJ nights, and let your evenings 
-  shimmer with unforgettable moments.
-</p>
+      <div id="about" style="margin-top:12px">
+        <p>Whether you're here for a casual evening out, a romantic dinner, or a lively night with friends, we offer an atmosphere that's both sophisticated and welcoming. Our chefs craft each dish with precision and flair, blending bold flavors, fresh ingredients, and artistic presentation. From sizzling appetizers to decadent desserts, every bite is a gem.</p>
 
-  <footer>
-    <div>Made with ❤️ • Diamond Restro & Bar</div>
-  </footer>
+        <p>Our bar is the heart of the energy—shaking, stirring, and pouring signature cocktails, premium spirits, and curated wines. Sip under ambient lighting, enjoy live music or DJ nights, and let your evenings shimmer with unforgettable moments.</p>
+      </div>
+    </section>
+  </main>
 
-  <!-- 2) Initialize Supabase AFTER library loaded -->
+  <footer style="max-width:1100px;margin:18px auto;padding:18px">© <span id="year"></span> Diamond Restro & Bar</footer>
+
   <script>
-    // ----- CONFIG -----
+    // Supabase config
     const SUPABASE_URL = "https://pwlqaduqyixyoavyfupx.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3bHFhdWR1eXhpeW9hdmZ5dXB4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4NDIyMDEsImV4cCI6MjA4MDQxODIwMX0.iHqBEG6fA8MPM0eo6pRkIwxtmQ0_6OEpMVkTr3ZY964";
-
-    // createClient is on the global `supabase` object loaded by the script tag
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // ----- DOM nodes -----
-    const menuGrid = document.getElementById('menuGrid');
-    const signedInAs = document.getElementById('signedInAs');
-    const cartCountEl = document.getElementById('cartCount');
+    // set year
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-    // ----- CART Helpers (localStorage) -----
-    function loadCart() {
+    // Check session and show user email
+    async function initAuth() {
       try {
-        return JSON.parse(localStorage.getItem('cart') || '[]');
-      } catch (e) { return []; }
-    }
-    function saveCart(cart) {
-      localStorage.setItem('cart', JSON.stringify(cart));
-      updateCartUI();
-    }
-    function updateCartUI(){
-      const cart = loadCart();
-      cartCountEl.textContent = cart.length;
-    }
-    function addToCart(item){
-      const cart = loadCart();
-      cart.push(item);
-      saveCart(cart);
-      alert(item.name + " added to cart");
-    }
-    function goToCart(){
-      // you already have a cart.html — navigate to it
-      window.location.href = 'cart.html';
-    }
-
-    // ----- AUTH check -----
-    async function checkAuthAndInit(){
-      // 1) Try Supabase auth
-      try {
-        const { data: userData, error } = await supabase.auth.getUser();
-        if (error) {
-          // not fatal — we may still use localStorage fallback
-          console.log("supabase.auth.getUser error:", error.message);
-        }
-        const user = userData?.user ?? null;
-
-        if (user) {
-          // Signed in with Supabase
-          signedInAs.innerHTML = `Signed in as <span class="user-email">${user.email || user.id}</span>`;
-        } else {
-          // If no Supabase auth session, check old localStorage "isLoggedIn"
-          const simpleLogin = localStorage.getItem('isLoggedIn') === 'true';
+        const { data } = await supabase.auth.getSession();
+        const session = data.session;
+        if (!session) {
+          // not signed in: try localStorage fallback (for older flows)
+          const simpleLogged = localStorage.getItem('isLoggedIn') === 'true';
           const simpleEmail = localStorage.getItem('userEmail') || null;
-          if (simpleLogin) {
-            signedInAs.innerHTML = `Signed in as <span class="user-email">${simpleEmail || 'local-user'}</span>`;
-          } else {
-            // NOT logged in — redirect to login page
-            // small delay so user sees page for a moment if desired
-            console.log("Not logged in. Redirecting to login.html");
-            window.location.href = 'login.html';
+          if (simpleLogged && simpleEmail) {
+            document.getElementById('signedInAs').textContent = 'Signed in as ' + simpleEmail;
             return;
           }
-        }
-      } catch (err){
-        console.error("Auth check failed:", err);
-      }
-
-      // 2) Continue initialization (fetch menu)
-      await fetchMenu();
-      updateCartUI();
-    }
-
-    // ----- Fetch menu from Supabase -----
-    async function fetchMenu(){
-      // Expecting a table named "Menu" in your Supabase project
-      // Columns typically: id, name, description, price, image_url
-      try {
-        const { data, error } = await supabase
-          .from('Menu')
-          .select('*')
-          .order('id', { ascending:true });
-
-        if (error){
-          console.error("Error fetching menu:", error);
-          // show fallback items if table not present
-          renderFallbackMenu();
+          // redirect to login
+          window.location.href = 'login.html';
           return;
         }
-        if (!data || data.length === 0) {
-          renderFallbackMenu();
-          return;
-        }
-        renderMenuItems(data);
-      } catch (err){
-        console.error("fetchMenu exception:", err);
-        renderFallbackMenu();
+        const user = session.user;
+        document.getElementById('signedInAs').innerHTML = `Signed in as <span class="user-email">${user.email || user.id}</span>`;
+      } catch (err) {
+        console.error('Auth check error', err);
+        window.location.href = 'login.html';
       }
     }
 
-    function renderFallbackMenu(){
-      const fallback = [
-        { id: 'f1', name: 'Veg Platter', description:'Delicious veg items', price:120, image_url:'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop' },
-        { id: 'f2', name: 'Butter Chicken', description:'Classic rich gravy', price:220, image_url:'https://images.unsplash.com/photo-1604908177522-3f6a8b39b1e6?q=80&w=800&auto=format&fit=crop' },
-        { id: 'f3', name: 'Mango Shake', description:'Cool & sweet', price:90, image_url:'https://images.unsplash.com/photo-1542444459-db42e2ea3b11?q=80&w=800&auto=format&fit=crop' },
-      ];
-      renderMenuItems(fallback);
-    }
-
-    function renderMenuItems(items){
-      menuGrid.innerHTML = '';
-      items.forEach(it => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <img src="${it.image_url || it.img || 'https://via.placeholder.com/600x400?text=Food'}" alt="${escapeHtml(it.name)}" />
-          <h3>${escapeHtml(it.name || 'Menu Item')}</h3>
-          <div class="small-muted">${escapeHtml(it.description || '')}</div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
-            <div class="price">₹${Number(it.price || it.full || 0)}</div>
-            <div>
-              <button onclick='addToCart(${JSON.stringify({ id: it.id, name: it.name, price: Number(it.price || it.full || 0) })})'>Add to Cart</button>
-            </div>
-          </div>
-        `;
-        menuGrid.appendChild(card);
-      });
-    }
-
-    // small helper to prevent accidental HTML injection
-    function escapeHtml(str){
-      if(!str) return '';
-      return String(str)
-        .replaceAll('&','&amp;')
-        .replaceAll('<','&lt;')
-        .replaceAll('>','&gt;')
-        .replaceAll('"','&quot;')
-        .replaceAll("'",'&#39;');
-    }
-
-    // ----- Logout (Supabase sign out + localStorage clear) -----
-    async function logout(){
+    // Logout button handler
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
       try {
-        // Attempt Supabase sign out (if session exists)
         await supabase.auth.signOut();
-      } catch (err){
-        console.warn("Supabase signOut failed:", err);
+      } catch (e) {
+        console.warn('Sign out error', e);
       }
-      // Clear local flags (if you used them)
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('userEmail');
-      // keep cart but you can also clear cart if you want:
-      // localStorage.removeItem('cart');
-
-      // Redirect to login page
       window.location.href = 'login.html';
-    }
-
-    // Run on page load
-    window.addEventListener('DOMContentLoaded', () => {
-      checkAuthAndInit();
     });
 
-    // Expose addToCart for inline onclick JSON-encoded calls from renderMenuItems
-    window.addToCart = function(item){
-      // item may come as object or JSON string
-      const parsed = typeof item === 'string' ? JSON.parse(item) : item;
-      addToCart(parsed);
-    };
-    window.goToCart = goToCart;
-    window.logout = logout;
+    initAuth();
   </script>
 </body>
 </html>
-
-
-
-
-
