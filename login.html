@@ -1,182 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login | Diamond Restro & Bar</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login — Diamond Restro & Bar</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      height: 100%;
-      font-family: 'Segoe UI', sans-serif;
-      overflow: hidden;
-      position: relative;
-    }
-
-    /* Background Slideshow */
-    .bg-slideshow {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-
-    .bg-slide {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      background-position: center;
-      opacity: 0;
-      animation: slideShow 5s infinite;
-    }
-
-    .bg-slide:nth-child(1) { background-image: url('https://img.freepik.com/free-photo/restaurant-interior_1127-3394.jpg?ga=GA1.1.2130554280.1748519292&semt=ais_hybrid&w=740'); animation-delay: 0s; }
-    .bg-slide:nth-child(2) { background-image: url('https://img.freepik.com/premium-photo/beautiful-interior-chairs-bar-counter-restaurant_713163-5412.jpg?ga=GA1.1.2130554280.1748519292&semt=ais_hybrid&w=740'); animation-delay: 1s; }
-    .bg-slide:nth-child(3) { background-image: url('https://img.freepik.com/free-photo/cocktails-shaker-arrangement-night-club_23-2149093603.jpg?ga=GA1.1.2130554280.1748519292&semt=ais_hybrid&w=740'); animation-delay: 2s; }
-    .bg-slide:nth-child(4) { background-image: url('https://img.freepik.com/premium-photo/glass-whiskey-with-ice-bar_93675-111256.jpg'); animation-delay: 3s; }
-    .bg-slide:nth-child(5) { background-image: url('https://img.freepik.com/free-photo/restaurant-interior_1127-3392.jpg?ga=GA1.1.2130554280.1748519292&semt=ais_hybrid&w=740'); animation-delay: 4s; }
-
-    @keyframes slideShow {
-      0% { opacity: 0; }
-      10% { opacity: 1; }
-      30% { opacity: 1; }
-      40% { opacity: 0; }
-      100% { opacity: 0; }
-    }
-
-    .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      z-index: -1;
-    }
-
-    .container {
-      position: relative;
-      background: rgba(255, 255, 255, 0.95);
-      padding: 30px 25px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.3);
-      width: 90%;
-      max-width: 350px;
-      text-align: center;
-      z-index: 1;
-    }
-
-    h2 {
-      margin-bottom: 20px;
-      color: #333;
-      font-weight: 600;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      font-size: 15px;
-      transition: 0.3s;
-    }
-
-    input:focus {
-      border-color: #00c6ff;
-      outline: none;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background-color: #333;
-      color: white;
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    button:hover {
-      background-color: #00c6ff;
-      transform: scale(1.05);
-      box-shadow: 0 0 10px #00c6ff;
-    }
-
-    .register-btn {
-      background-color: #4CAF50;
-    }
-
-    .register-btn:hover {
-      background-color: #45a049;
-      box-shadow: 0 0 10px #45a049;
-    }
-
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    @media (max-width: 480px) {
-      .container {
-        padding: 20px 15px;
-      }
-    }
+    body{font-family:Segoe UI, Tahoma, sans-serif;background:linear-gradient(180deg,#f4f4f4,#ddd);display:flex;align-items:center;justify-content:center;height:100vh;margin:0}
+    .card{background:#fff;padding:22px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.12);width:360px}
+    h2{margin:0 0 12px;font-size:20px}
+    input{width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;margin:8px 0}
+    button{width:100%;padding:10px;border-radius:8px;border:none;background:#0ea5a5;color:#fff;font-weight:700;cursor:pointer}
+    .note{font-size:13px;color:#666;margin-top:10px;text-align:center}
   </style>
 </head>
 <body>
-
-  <!-- Background Slideshow -->
-  <div class="bg-slideshow">
-    <div class="bg-slide"></div>
-    <div class="bg-slide"></div>
-    <div class="bg-slide"></div>
-    <div class="bg-slide"></div>
-    <div class="bg-slide"></div>
-    <div class="overlay"></div>
-  </div>
-
-  <!-- Login Container -->
-  <div class="container">
+  <div class="card">
     <h2>Login</h2>
-    <input type="text" id="loginUsername" placeholder="Username">
-    <input type="password" id="loginPassword" placeholder="Password">
-    <button onclick="login()">Login</button>
-    <button class="register-btn" onclick="window.location.href='signup.html'">Register</button>
+    <input id="email" type="email" placeholder="Email" />
+    <input id="password" type="password" placeholder="Password" />
+    <button id="loginBtn">Login</button>
+    <div class="note">New here? <a href="signup.html">Create account</a></div>
+    <p id="msg" style="color:red;font-size:13px;margin-top:8px"></p>
   </div>
 
   <script>
-    function login() {
-      const username = document.getElementById('loginUsername').value.trim();
-      const password = document.getElementById('loginPassword').value.trim();
+    // Supabase config
+    const SUPABASE_URL = "https://pwlqaduqyixyoavyfupx.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3bHFhdWR1eXhpeW9hdmZ5dXB4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4NDIyMDEsImV4cCI6MjA4MDQxODIwMX0.iHqBEG6fA8MPM0eo6pRkIwxtmQ0_6OEpMVkTr3ZY964";
 
-      if (!username || !password) {
-        alert("Please enter both username and password.");
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const msg = document.getElementById('msg');
+      msg.textContent = '';
+
+      if (!email || !password) {
+        msg.textContent = 'Please enter email and password.';
         return;
       }
 
-      const storedPassword = localStorage.getItem("user_" + username);
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-      if (storedPassword === password) {
-        localStorage.setItem("isLoggedIn", "true");
-        window.location.href = "index.html";
-      } else {
-        alert("Wrong username or password!");
+      if (error) {
+        msg.textContent = error.message;
+        return;
       }
-    }
-  </script>
 
+      // Successful login — store small flag (optional) and redirect to home
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('userEmail', data.user?.email || '');
+      window.location.href = 'index.html';
+    });
+  </script>
 </body>
 </html>
