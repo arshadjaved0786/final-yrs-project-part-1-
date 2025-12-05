@@ -1,363 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Sign Up | Diamond Restro & Bar</title>
-
-  <!-- Supabase JS (v2) -->
+  <meta charset="utf-8" />
+  <title>Signup — Diamond Restro & Bar</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <!-- Supabase v2 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
 
   <style>
-    /* ---------- Page reset & fonts ---------- */
+    /* simple centered card + small animations */
     *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;-webkit-font-smoothing:antialiased}
-    a{color:inherit}
-
-    /* ---------- Background Slideshow (images + animation) ---------- */
-    .bg-slideshow { position: fixed; inset:0; z-index:-3; overflow:hidden; }
-    .bg-slide { position:absolute; inset:0; background-size:cover; background-position:center; opacity:0; transform:scale(1.03); animation:slideShow 25s infinite ease-in-out; filter:brightness(.65) contrast(1.02); }
-    .bg-slide:nth-child(1) { background-image: url('https://img.freepik.com/free-photo/restaurant-interior_1127-3394.jpg'); animation-delay: 0s; }
-    .bg-slide:nth-child(2) { background-image: url('https://img.freepik.com/premium-photo/beautiful-interior-chairs-bar-counter-restaurant_713163-5412.jpg'); animation-delay: 5s; }
-    .bg-slide:nth-child(3) { background-image: url('https://img.freepik.com/free-photo/cocktails-shaker-arrangement-night-club_23-2149093603.jpg'); animation-delay: 10s; }
-    .bg-slide:nth-child(4) { background-image: url('https://img.freepik.com/premium-photo/glass-whiskey-with-ice-bar_93675-111256.jpg'); animation-delay: 15s; }
-    .bg-slide:nth-child(5) { background-image: url('https://img.freepik.com/free-photo/restaurant-interior_1127-3392.jpg'); animation-delay: 20s; }
-    @keyframes slideShow {
-      0% { opacity:0; transform:scale(1.02) }
-      8% { opacity:1; transform:scale(1) }
-      22% { opacity:1; transform:scale(1) }
-      30% { opacity:0; transform:scale(1.02) }
-      100% { opacity:0; transform:scale(1.02) }
-    }
-    .bg-overlay { position:fixed; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.45)); z-index:-2; }
-
-    /* ---------- Centered container ---------- */
-    .wrap { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:28px; }
-    .card {
-      width:100%; max-width:460px; background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,250,0.98));
-      border-radius:14px; box-shadow:0 18px 50px rgba(2,6,23,0.36); padding:22px; position:relative; overflow:hidden;
-      animation:cardPop .42s cubic-bezier(.2,.9,.2,1) both;
-    }
-    @keyframes cardPop { from{opacity:0; transform:translateY(10px) scale(.995)} to{opacity:1; transform:none} }
-
-    /* ---------- Animated logo ---------- */
-    .logo-row { display:flex; gap:12px; align-items:center; margin-bottom:8px; }
-    .logo {
-      width:64px; height:64px; border-radius:12px; overflow:hidden; display:inline-flex; align-items:center; justify-content:center;
-      background:linear-gradient(135deg,#fff,#f2f6f8); box-shadow:0 8px 24px rgba(2,6,23,0.12); transform-origin:center; animation:logoFloat 4s ease-in-out infinite;
-      border:2px solid rgba(255,255,255,0.6);
-    }
-    .logo img { width:86%; height:86%; object-fit:contain; display:block; }
-    @keyframes logoFloat { 0%{transform:translateY(0)} 50%{transform:translateY(-6px)} 100%{transform:translateY(0)} }
-
-    .brand-title { font-size:18px; font-weight:800; color:#111; letter-spacing:.2px }
-    .brand-sub { font-size:13px; color:#666 }
-
-    /* ---------- Form styles ---------- */
-    .form { margin-top:8px; display:grid; gap:10px; }
-    label { display:block; font-size:13px; color:#444; font-weight:700; margin-bottom:6px }
-    .input-wrap { position:relative }
-    input[type="email"], input[type="password"] {
-      width:100%; padding:12px 14px; border-radius:10px; border:2px solid #eef2f4; font-size:15px;
-      transition:box-shadow .18s, border-color .18s, transform .12s;
-      background:linear-gradient(180deg,#fff,#fbfbfb);
-      outline:none;
-    }
-    input:focus { border-color:#7dd3fc; box-shadow:0 8px 20px rgba(13,148,136,0.06); transform:translateY(-2px) }
-    .hint { font-size:13px; color:#777 }
-
-    /* animated button */
-    .btn {
-      display:inline-flex; align-items:center; justify-content:center; gap:8px;
-      width:100%; padding:12px; border-radius:10px; border:none; cursor:pointer;
-      font-weight:800; background:linear-gradient(90deg,#06b6d4, #06a6a4); color:white;
-      box-shadow:0 12px 28px rgba(6,182,167,0.14); transition:transform .12s ease, box-shadow .12s;
-    }
-    .btn:hover { transform:translateY(-3px); box-shadow:0 18px 34px rgba(6,182,167,0.18) }
-    .btn[disabled]{opacity:.6; cursor:not-allowed; transform:none; box-shadow:none}
-
-    /* subtle animated underline */
-    .footer-note { margin-top:8px; font-size:13px; color:#666; text-align:center }
-
-    /* ---------- Modal styles & animations ---------- */
-    .modal-backdrop { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:9999; background:rgba(0,0,0,0.5); }
-    .modal {
-      width:92%; max-width:420px; background:#fff; border-radius:12px; padding:18px; box-shadow:0 20px 60px rgba(2,6,23,0.32);
-      transform-origin:center; animation:modalPop .26s cubic-bezier(.2,.9,.2,1) both;
-      text-align:center;
-    }
-    @keyframes modalPop { from{opacity:0; transform:translateY(8px) scale(.98)} to{opacity:1; transform:none} }
-
-    .modal h3 { margin:0; font-size:18px; color:#111 }
-    .modal p { margin:10px 0 14px; color:#444; font-size:15px }
-    .modal .actions { display:flex; gap:10px; justify-content:center; margin-top:8px }
-    .modal .actions .btn { width:auto; padding:9px 12px; border-radius:8px; font-weight:700 }
-    .modal .btn.cancel { background:#fff; color:#333; border:1px solid #e6e6e6; box-shadow:none }
-    .modal .btn.confirm { background:linear-gradient(90deg,#10b981,#06b6d4); color:#fff }
-
-    /* success check animation inside modal */
-    .check { width:78px; height:78px; margin:0 auto 8px; display:flex; align-items:center; justify-content:center; }
-    .check svg { width:56px; height:56px; }
-    .check .circle { fill:none; stroke:#10b981; stroke-width:4; stroke-dasharray:200; stroke-dashoffset:200; animation:dash 0.9s ease forwards; }
-    .check .tick { fill:none; stroke:#10b981; stroke-width:4; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:50; stroke-dashoffset:50; animation:tick 0.6s 0.9s ease forwards; }
-    @keyframes dash { to{ stroke-dashoffset:0 } }
-    @keyframes tick { to{ stroke-dashoffset:0 } }
-
-    /* Responsive */
-    @media (max-width:520px) {
-      .logo{width:56px;height:56px}
-      .card{padding:16px}
-    }
+    body{margin:0;font-family:Segoe UI, Tahoma, Verdana, sans-serif;background:linear-gradient(180deg,#f3f4f6,#e6eef0);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+    .card{width:100%;max-width:440px;background:#fff;border-radius:14px;padding:20px 22px;box-shadow:0 18px 40px rgba(8,12,20,0.08);transform-origin:center;animation:pop .28s both}
+    @keyframes pop{from{opacity:0;transform:translateY(8px) scale(.995)}to{opacity:1;transform:none}}
+    h1{font-size:20px;margin:6px 0 12px;color:#111}
+    label{display:block;font-weight:600;color:#444;margin-top:8px;font-size:13px}
+    input{width:100%;padding:11px 12px;border-radius:10px;border:1px solid #e6eef0;margin-top:6px;font-size:15px}
+    input:focus{outline:none;box-shadow:0 8px 22px rgba(6,182,167,0.06);border-color:#7dd3fc}
+    .btn{width:100%;padding:12px;border-radius:10px;border:none;background:linear-gradient(90deg,#06b6d4,#089191);color:#fff;font-weight:800;margin-top:14px;cursor:pointer}
+    .btn[disabled]{opacity:.6;cursor:not-allowed}
+    .small{font-size:13px;color:#666;margin-top:10px;text-align:center}
+    a.link{color:#0b7c7c;text-decoration:underline}
+    /* modal */
+    .modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:999}
+    .modal{width:92%;max-width:420px;background:#fff;padding:18px;border-radius:12px;box-shadow:0 20px 60px rgba(2,6,23,0.28);text-align:center}
+    .modal h3{margin:0;font-size:18px}
+    .modal p{color:#444;margin:10px 0 16px}
+    .actions{display:flex;gap:10px;justify-content:center}
+    .actions button{padding:10px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
+    .cancel{background:#fff;border:1px solid #ddd}
+    .confirm{background:linear-gradient(90deg,#10b981,#06b6d4);color:#fff}
   </style>
 </head>
 <body>
-  <!-- background slideshow + subtle dark overlay -->
-  <div class="bg-slideshow" aria-hidden="true">
-    <div class="bg-slide"></div>
-    <div class="bg-slide"></div>
-    <div class="bg-slide"></div>
-    <div class="bg-slide"></div>
-    <div class="bg-slide"></div>
-  </div>
-  <div class="bg-overlay" aria-hidden="true"></div>
 
-  <div class="wrap">
-    <section class="card" role="main" aria-labelledby="signup-heading">
-      <div class="logo-row" role="banner">
-        <div class="logo" aria-hidden="false">
-          <!-- small diamond logo; you can replace src with your own -->
-          <img src="https://shorturl.at/4Stns" alt="Diamond logo" />
-        </div>
-        <div>
-          <div class="brand-title">Diamond Restro & Bar</div>
-          <div class="brand-sub">Create account — access clients & orders</div>
-        </div>
-      </div>
+  <main class="card" role="main" aria-labelledby="h">
+    <h1 id="h">Sign up — Diamond Restro & Bar</h1>
 
-      <h2 id="signup-heading" style="margin:8px 0 12px;font-size:20px;color:#111">Create Your Account</h2>
+    <label for="email">Email</label>
+    <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
 
-      <form class="form" onsubmit="return false" aria-describedby="form-desc">
-        <div id="form-desc" class="hint" style="margin-bottom:6px;color:#666">Use an email and a secure password (min 6 chars)</div>
+    <label for="password">Password</label>
+    <input id="password" type="password" placeholder="Create a password (min 6 chars)" autocomplete="new-password">
 
-        <div>
-          <label for="email">Email</label>
-          <div class="input-wrap">
-            <input id="email" type="email" placeholder="you@example.com" autocomplete="email" required />
-          </div>
-        </div>
+    <label for="confirm">Confirm Password</label>
+    <input id="confirm" type="password" placeholder="Repeat password" autocomplete="new-password">
 
-        <div>
-          <label for="password">Password</label>
-          <div class="input-wrap">
-            <input id="password" type="password" placeholder="Choose a strong password (min 6 chars)" autocomplete="new-password" required />
-          </div>
-        </div>
+    <button id="signupBtn" class="btn" type="button">Sign Up</button>
 
-        <div>
-          <label for="confirm">Confirm Password</label>
-          <div class="input-wrap">
-            <input id="confirm" type="password" placeholder="Repeat your password" autocomplete="new-password" required />
-          </div>
-        </div>
+    <div class="small">Already have an account? <a class="link" href="login.html">Login</a></div>
+    <div id="inlineMsg" style="margin-top:8px;text-align:center;color:#c53030;min-height:18px"></div>
+  </main>
 
-        <div>
-          <button id="signupBtn" class="btn" type="button" aria-live="polite">
-            <span>Sign Up</span>
-          </button>
-        </div>
-
-        <div class="footer-note">
-          <div class="note">Already have an account? <a href="login.html">Login</a></div>
-        </div>
-
-        <div id="msg" class="msg" role="status" aria-live="polite" style="min-height:18px;margin-top:8px;color:#c53030"></div>
-      </form>
-    </section>
-  </div>
-
-  <!-- Modal root (dynamically filled) -->
+  <!-- modal root -->
   <div id="modalRoot" aria-hidden="true"></div>
 
   <script>
-    // ---------- Supabase config (same as your project) ----------
+    // ===== Supabase config (use your project values) =====
     const SUPABASE_URL = "https://pwlqaduqyixyoavyfupx.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3bHFhdWR1eXhpeW9hdmZ5dXB4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4NDIyMDEsImV4cCI6MjA4MDQxODIwMX0.iHqBEG6fA8MPM0eo6pRkIwxtmQ0_6OEpMVkTr3ZY964";
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Elements
+    // elements
     const emailEl = document.getElementById('email');
-    const passwordEl = document.getElementById('password');
-    const confirmEl = document.getElementById('confirm');
-    const signupBtn = document.getElementById('signupBtn');
-    const msgEl = document.getElementById('msg');
+    const passEl = document.getElementById('password');
+    const confEl = document.getElementById('confirm');
+    const btn = document.getElementById('signupBtn');
+    const inlineMsg = document.getElementById('inlineMsg');
     const modalRoot = document.getElementById('modalRoot');
 
-    // Helpers
-    function escapeHtml(str = '') {
-      return String(str).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
+    // util
+    function showInline(text, color='#c53030'){ inlineMsg.textContent = text; inlineMsg.style.color = color; }
+    function escapeHtml(s=''){ return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;'); }
+
+    // modal helpers
+    function openConfirm(title, text){
+      return new Promise(resolve => {
+        modalRoot.innerHTML = `<div class="modal-back" role="dialog" aria-modal="true">
+          <div class="modal"><h3>${escapeHtml(title)}</h3><p>${escapeHtml(text)}</p>
+            <div class="actions">
+              <button class="cancel" id="mCancel">Cancel</button>
+              <button class="confirm" id="mConfirm">Confirm</button>
+            </div>
+          </div></div>`;
+        modalRoot.setAttribute('aria-hidden','false');
+        const c = document.getElementById('mConfirm'), x = document.getElementById('mCancel');
+        c.focus();
+        function cleanup(){ modalRoot.innerHTML=''; modalRoot.setAttribute('aria-hidden','true'); c.removeEventListener('click',onC); x.removeEventListener('click',onX); }
+        function onC(){ cleanup(); resolve(true); }
+        function onX(){ cleanup(); resolve(false); }
+        c.addEventListener('click', onC);
+        x.addEventListener('click', onX);
+      });
     }
-    function showInlineMessage(text, color = '#c53030') {
-      msgEl.textContent = text; msgEl.style.color = color;
+    function openAlert(title, text){
+      return new Promise(resolve => {
+        modalRoot.innerHTML = `<div class="modal-back" role="alertdialog" aria-modal="true">
+          <div class="modal"><h3>${escapeHtml(title)}</h3><p>${escapeHtml(text)}</p>
+            <div class="actions"><button class="confirm" id="mOk">OK</button></div>
+          </div></div>`;
+        modalRoot.setAttribute('aria-hidden','false');
+        const ok = document.getElementById('mOk');
+        ok.focus();
+        function cleanup(){ modalRoot.innerHTML=''; modalRoot.setAttribute('aria-hidden','true'); ok.removeEventListener('click',onOk); }
+        function onOk(){ cleanup(); resolve(); }
+        ok.addEventListener('click', onOk);
+      });
     }
 
-    function validateInputs(email, password, confirm) {
-      if (!email) return 'Please enter an email.';
-      if (!/^\S+@\S+\.\S+$/.test(email)) return 'Please enter a valid email address.';
-      if (!password) return 'Please enter a password.';
-      if (password.length < 6) return 'Password should be at least 6 characters.';
-      if (password !== confirm) return 'Passwords do not match.';
+    // validation
+    function validate(email,password,confirm){
+      if(!email) return 'Please enter email';
+      if(!/^\S+@\S+\.\S+$/.test(email)) return 'Please enter a valid email';
+      if(!password) return 'Please enter password';
+      if(password.length < 6) return 'Password must be at least 6 characters';
+      if(password !== confirm) return 'Passwords do not match';
       return null;
     }
 
-    // ---------- Modal helpers ----------
-    function createModal(html) {
-      modalRoot.innerHTML = html;
-      modalRoot.setAttribute('aria-hidden', 'false');
-      const backdrop = modalRoot.querySelector('.modal-backdrop');
-      if (backdrop) backdrop.focus();
-      return modalRoot;
-    }
-    function closeModal() {
-      modalRoot.innerHTML = '';
-      modalRoot.setAttribute('aria-hidden', 'true');
-    }
-
-    // showConfirm returns true/false
-    function showConfirm(title, message, confirmLabel='Confirm', cancelLabel='Cancel') {
-      return new Promise(resolve => {
-        const html = `
-          <div class="modal-backdrop" tabindex="-1" role="dialog" aria-modal="true">
-            <div class="modal" role="document" aria-labelledby="modal-title">
-              <h3 id="modal-title">${escapeHtml(title)}</h3>
-              <p>${escapeHtml(message)}</p>
-              <div class="actions">
-                <button class="btn cancel" id="modalCancel">${escapeHtml(cancelLabel)}</button>
-                <button class="btn confirm" id="modalConfirm">${escapeHtml(confirmLabel)}</button>
-              </div>
-            </div>
-          </div>`;
-        createModal(html);
-
-        const confirmBtn = document.getElementById('modalConfirm');
-        const cancelBtn = document.getElementById('modalCancel');
-        const backdrop = modalRoot.querySelector('.modal-backdrop');
-
-        function cleanup() { closeModal(); confirmBtn.removeEventListener('click', onConfirm); cancelBtn.removeEventListener('click', onCancel); backdrop.removeEventListener('keydown', onKey); }
-        function onConfirm() { cleanup(); resolve(true); }
-        function onCancel() { cleanup(); resolve(false); }
-        function onKey(e) {
-          if (e.key === 'Escape') onCancel();
-          if (e.key === 'Enter') onConfirm();
-        }
-
-        confirmBtn.addEventListener('click', onConfirm);
-        cancelBtn.addEventListener('click', onCancel);
-        backdrop.addEventListener('keydown', onKey);
-        confirmBtn.focus();
-      });
-    }
-
-    // showAlert displays message and OK button; optional success animation shows check SVG
-    function showAlert(title, message, okLabel='OK', successAnimation=false) {
-      return new Promise(resolve => {
-        const checkHtml = successAnimation ? `
-          <div class="check" aria-hidden="true">
-            <svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-              <circle class="circle" cx="26" cy="26" r="20" />
-              <path class="tick" fill="none" d="M16 27 l7 7 l13 -13" />
-            </svg>
-          </div>` : '';
-
-        const html = `
-          <div class="modal-backdrop" tabindex="-1" role="alertdialog" aria-modal="true">
-            <div class="modal" role="document" aria-labelledby="modal-title">
-              ${checkHtml}
-              <h3 id="modal-title">${escapeHtml(title)}</h3>
-              <p>${escapeHtml(message)}</p>
-              <div class="actions">
-                <button class="btn confirm" id="modalOk">${escapeHtml(okLabel)}</button>
-              </div>
-            </div>
-          </div>`;
-        createModal(html);
-
-        const okBtn = document.getElementById('modalOk');
-        const backdrop = modalRoot.querySelector('.modal-backdrop');
-        function cleanup() { closeModal(); okBtn.removeEventListener('click', onOk); backdrop.removeEventListener('keydown', onKey); }
-        function onOk() { cleanup(); resolve(); }
-        function onKey(e) { if (e.key === 'Escape' || e.key === 'Enter') onOk(); }
-
-        okBtn.addEventListener('click', onOk);
-        backdrop.addEventListener('keydown', onKey);
-        okBtn.focus();
-      });
-    }
-
-    // ---------- Signup flow with confirmation modal + auto-sign-in ----------
-    signupBtn.addEventListener('click', async () => {
+    // signup click
+    btn.addEventListener('click', async ()=>{
       const email = emailEl.value.trim();
-      const password = passwordEl.value;
-      const confirm = confirmEl.value;
-      showInlineMessage('', '#c53030');
+      const password = passEl.value;
+      const confirm = confEl.value;
+      showInline('', '#c53030');
 
-      const validationError = validateInputs(email, password, confirm);
-      if (validationError) {
-        showInlineMessage(validationError, '#c53030');
-        return;
-      }
+      const v = validate(email,password,confirm);
+      if(v){ showInline(v); return; }
 
-      // Confirm creation
-      const ok = await showConfirm('Create account?', `Create an account for ${email}?`, 'Yes, create', 'Cancel');
-      if (!ok) {
-        showInlineMessage('Signup cancelled.', '#666');
-        return;
-      }
+      // show confirm popup
+      const ok = await openConfirm('Confirm create account', `Create account for ${email}?`);
+      if(!ok){ showInline('Signup cancelled', '#666'); return; }
 
-      // disable UI
-      signupBtn.disabled = true;
-      signupBtn.textContent = 'Creating account...';
-      try {
-        // create account
+      // disable while creating
+      btn.disabled = true;
+      btn.textContent = 'Creating...';
+
+      try{
         const { data, error } = await supabase.auth.signUp({ email, password });
-
-        if (error) {
-          // show error modal
-          await showAlert('Signup failed', error.message || 'Signup failed. Try again.', 'OK', false);
-          showInlineMessage(error.message || 'Signup failed. Try again.', '#c53030');
-          signupBtn.disabled = false;
-          signupBtn.textContent = 'Sign Up';
+        if(error){
+          await openAlert('Signup failed', error.message || 'Try again');
+          showInline(error.message || 'Signup failed');
+          btn.disabled = false; btn.textContent = 'Sign Up';
           return;
         }
 
-        // Try to sign in right away with the same credentials
-        // If your Supabase project requires email confirmation, this sign-in may fail.
-        const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-
-        if (signInError || !signInData?.session) {
-          // sign-in failed — probably email confirmation required or other issue
-          // Inform the user and redirect to login page where they can follow normal flow
-          await showAlert('Account created', 'Your account was created. Please confirm your email (check inbox) if required, then log in. You will be taken to the login page now.', 'OK', true);
-          // redirect to login (so user can log in after email confirmation)
-          window.location.href = 'login.html';
-          return;
-        }
-
-        // sign-in succeeded — we have a session. go to index (logged in)
-        await showAlert('Welcome!', 'Account created and signed in. Redirecting to home...', 'OK', true);
-        // redirect to protected page (index.html)
-        window.location.href = 'index.html';
-      } catch (err) {
-        console.error('Signup exception', err);
-        await showAlert('Error', 'An unexpected error occurred. Please try again.', 'OK', false);
-        showInlineMessage('An unexpected error occurred. Please try again.', '#c53030');
-        signupBtn.disabled = false;
-        signupBtn.textContent = 'Sign Up';
+        // success - show success alert and redirect to login
+        await openAlert('Account created', 'Account created successfully. Now go to login with same email & password.');
+        // clear
+        emailEl.value = ''; passEl.value = ''; confEl.value = '';
+        // redirect to login page
+        window.location.href = 'login.html';
+      }catch(err){
+        console.error(err);
+        await openAlert('Error', 'Unexpected error. Try again.');
+        btn.disabled = false; btn.textContent = 'Sign Up';
       }
     });
 
-    // Enter key triggers signup
-    [emailEl, passwordEl, confirmEl].forEach(el => el.addEventListener('keyup', e => {
-      if (e.key === 'Enter') signupBtn.click();
-    }));
+    // allow enter key
+    [emailEl,passEl,confEl].forEach(el=>el.addEventListener('keyup', e=>{ if(e.key==='Enter') btn.click(); }));
   </script>
 </body>
 </html>
