@@ -256,7 +256,7 @@
       });
     }
 
-    // showAlert displays message and OK button; optional successAnimation true shows check SVG animation
+    // showAlert displays message and OK button; optional success animation shows check SVG
     function showAlert(title, message, okLabel='OK', successAnimation=false) {
       return new Promise(resolve => {
         const checkHtml = successAnimation ? `
@@ -292,8 +292,7 @@
       });
     }
 
-    // ---------- Signup flow with confirmation modal + animated success ----------
-
+    // ---------- Signup flow with confirmation modal + auto-sign-in ----------
     signupBtn.addEventListener('click', async () => {
       const email = emailEl.value.trim();
       const password = passwordEl.value;
@@ -306,7 +305,7 @@
         return;
       }
 
-      // Confirm
+      // Confirm creation
       const ok = await showConfirm('Create account?', `Create an account for ${email}?`, 'Yes, create', 'Cancel');
       if (!ok) {
         showInlineMessage('Signup cancelled.', '#666');
@@ -317,6 +316,7 @@
       signupBtn.disabled = true;
       signupBtn.textContent = 'Creating account...';
       try {
+        // create account
         const { data, error } = await supabase.auth.signUp({ email, password });
 
         if (error) {
@@ -328,16 +328,23 @@
           return;
         }
 
-        // success - show animated check and message
-        const successMsg = data?.user?.email ? `Account created for ${data.user.email}. Check your email for confirmation if required.` : 'Account created. Check your email if confirmation is required.';
-        await showAlert('Account created', successMsg, 'OK', true);
+        // Try to sign in right away with the same credentials
+        // If your Supabase project requires email confirmation, this sign-in may fail.
+        const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
 
-        // clear fields and redirect to login after small delay
-        emailEl.value = '';
-        passwordEl.value = '';
-        confirmEl.value = '';
-        showInlineMessage('Created! Redirecting to login...', '#0b7c7c');
-        setTimeout(() => { window.location.href = 'login.html'; }, 900);
+        if (signInError || !signInData?.session) {
+          // sign-in failed — probably email confirmation required or other issue
+          // Inform the user and redirect to login page where they can follow normal flow
+          await showAlert('Account created', 'Your account was created. Please confirm your email (check inbox) if required, then log in. You will be taken to the login page now.', 'OK', true);
+          // redirect to login (so user can log in after email confirmation)
+          window.location.href = 'login.html';
+          return;
+        }
+
+        // sign-in succeeded — we have a session. go to index (logged in)
+        await showAlert('Welcome!', 'Account created and signed in. Redirecting to home...', 'OK', true);
+        // redirect to protected page (index.html)
+        window.location.href = 'index.html';
       } catch (err) {
         console.error('Signup exception', err);
         await showAlert('Error', 'An unexpected error occurred. Please try again.', 'OK', false);
