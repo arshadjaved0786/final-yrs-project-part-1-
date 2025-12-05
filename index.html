@@ -184,25 +184,29 @@
 
   <script>
     /*
-      Auto-swap + click-to-swap script.
-      Uses stable Unsplash images (auto=format&fit=crop&w=...) for good reliability.
-      Timers: hero 4s, feat1 5s, feat2 6s, feat3 7s (staggered to avoid simultaneous swapping)
+      Fixed & working script:
+      - Uses your 4 uploaded images for the hero.
+      - Auto-swap and click-to-swap implemented.
+      - Feature tiles have their own image sets and auto-swap.
+      - Logout button removes isLoggedIn and navigates to login.html.
+      - Preloads images and uses a small inline SVG fallback if any image fails.
     */
     document.addEventListener('DOMContentLoaded', () => {
-      // Collections (4 images each) - stable format
-      const heroImages = [
-        const heroImages = [
-  "https://i.postimg.cc/0Q0H2FCr/food1.jpg", 
-  "https://i.postimg.cc/5NkF5Y7d/food2.jpg",
-  "https://i.postimg.cc/T3xJcHJn/food3.jpg",
-  "https://i.postimg.cc/GhJhvJsb/food4.jpg"
-];
 
+      // ---------- YOUR HERO IMAGES (4 images you provided; stable CDN links) ----------
+      const heroImages = [
+        "https://i.postimg.cc/0Q0H2FCr/food1.jpg",
+        "https://i.postimg.cc/5NkF5Y7d/food2.jpg",
+        "https://i.postimg.cc/T3xJcHJn/food3.jpg",
+        "https://i.postimg.cc/GhJhvJsb/food4.jpg"
+      ];
+
+      // feature image sets (4 each) - these are chosen to complement hero pictures
       const feat1Images = [
-        "https://images.unsplash.com/photo-1604908813403-df2a3b2c9b64?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1546069901-eacef0df6022?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1526318472351-c75fcf070db6?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=80"
+        "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1604908813403-df2a3b2c9b64?auto=format&fit=crop&w=800&q=80"
       ];
 
       const feat2Images = [
@@ -231,7 +235,6 @@
 
       if (!heroImgEl || !feat1Img || !feat2Img || !feat3Img) {
         console.warn("Missing image elements; check IDs heroImgEl, feat1Img, feat2Img, feat3Img");
-        return;
       }
 
       // indexes
@@ -249,6 +252,7 @@
 
       // set with fallback
       function setWithFallback(el, src) {
+        if (!el) return;
         el.src = src;
         el.onerror = () => { el.src = fallbackDataURI; };
       }
@@ -303,12 +307,12 @@
       });
 
       // AUTO-SWAP timers (staggered)
-      const heroTimer = setInterval(() => swap(heroImgEl, heroImages, 'hero'), 4000);
-      const f1Timer   = setInterval(() => swap(feat1Img, feat1Images, 'f1'), 5000);
-      const f2Timer   = setInterval(() => swap(feat2Img, feat2Images, 'f2'), 6000);
-      const f3Timer   = setInterval(() => swap(feat3Img, feat3Images, 'f3'), 7000);
+      let heroTimer = setInterval(() => swap(heroImgEl, heroImages, 'hero'), 4000);
+      let f1Timer   = setInterval(() => swap(feat1Img, feat1Images, 'f1'), 5000);
+      let f2Timer   = setInterval(() => swap(feat2Img, feat2Images, 'f2'), 6000);
+      let f3Timer   = setInterval(() => swap(feat3Img, feat3Images, 'f3'), 7000);
 
-      // small safety: clear intervals when page hidden to save resources
+      // safety: clear intervals when page hidden to save resources
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
           clearInterval(heroTimer);
@@ -317,24 +321,34 @@
           clearInterval(f3Timer);
         } else {
           // re-create timers when visible again
-          // (simple approach: reload page images and then set new intervals)
-          init();
-          // reassign (note: these are new variables scoped here; fine for typical usage)
-          setInterval(() => swap(heroImgEl, heroImages, 'hero'), 4000);
-          setInterval(() => swap(feat1Img, feat1Images, 'f1'), 5000);
-          setInterval(() => swap(feat2Img, feat2Images, 'f2'), 6000);
-          setInterval(() => swap(feat3Img, feat3Images, 'f3'), 7000);
+          heroTimer = setInterval(() => swap(heroImgEl, heroImages, 'hero'), 4000);
+          f1Timer   = setInterval(() => swap(feat1Img, feat1Images, 'f1'), 5000);
+          f2Timer   = setInterval(() => swap(feat2Img, feat2Images, 'f2'), 6000);
+          f3Timer   = setInterval(() => swap(feat3Img, feat3Images, 'f3'), 7000);
         }
       });
 
       // UI handlers
       const yearEl = document.getElementById('year'); if (yearEl) yearEl.textContent = new Date().getFullYear();
-      const logoutBtn = document.getElementById('logoutBtn'); if (logoutBtn) logoutBtn.addEventListener('click', () => { localStorage.removeItem('isLoggedIn'); window.location.href = 'login.html'; });
+
+      // ---------- LOGOUT: fixed - removes local flag and redirects ----------
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          // remove the flag used for login
+          localStorage.removeItem('isLoggedIn');
+          // optionally clear other login data if you store it
+          // localStorage.removeItem('user'); localStorage.removeItem('token');
+          // redirect to login page
+          window.location.href = 'login.html';
+        });
+      }
+
       const reserveBtn = document.getElementById('reserveBtn'); if (reserveBtn) reserveBtn.addEventListener('click', () => window.location.href = 'contact.html');
 
+      // initialize
       init();
     });
   </script>
 </body>
 </html>
-
